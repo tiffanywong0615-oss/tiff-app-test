@@ -1,0 +1,93 @@
+{
+  "trips": [
+    {
+      "id": "uuid-2026-kyushu",
+      "title": "2026 九州六日自駕美食之旅",
+      "destination": "福岡, 熊本, 阿蘇, 別府, 由布院, 能古島",
+      "totalEstimatedBudget": 18500,
+      "dailyItinerary": [
+        {
+          "day": 1,
+          "date": "2026-05-07",
+          "city": "熊本",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "08:15", "type": "Transport", "location": "CX512 HKG→FUK", "note": "航班", "cost": 0 },
+            { "time": "14:00", "type": "Transport", "location": "租車公司取車 (大7人車)", "note": "", "cost": 18000 },
+            { "time": "15:00", "type": "Food", "location": "太宰府天滿宮周邊", "note": "和牛明太神樂 (和牛明太子蓋飯)", "cost": 2500 },
+            { "time": "16:30", "type": "Sightseeing", "location": "太宰府天滿宮", "note": "參拜、星巴克咖啡", "cost": 0 },
+            { "time": "19:30", "type": "Food", "location": "熊本下通購物街", "note": "馬櫻 馬肉料理 (馬肉刺身/燒肉)", "cost": 5000 },
+            { "time": "21:00", "type": "Shopping", "location": "下通購物街", "note": "", "cost": 0 },
+            { "time": "22:30", "type": "Hotel", "location": "熊本花開酒店", "note": "住宿", "cost": 13200 }
+          ]
+        },
+        {
+          "day": 2,
+          "date": "2026-05-08",
+          "city": "別府",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "08:30", "type": "Food", "location": "熊本飯店周邊", "note": "Licht Coffee & Cakes (精品手沖)", "cost": 800 },
+            { "time": "10:30", "type": "Sightseeing", "location": "阿蘇大觀峰 展望台", "note": "", "cost": 0 },
+            { "time": "12:00", "type": "Food", "location": "阿蘇景觀餐廳", "note": "阿蘇庭 山見茶屋 (赤牛丼)", "cost": 2000 },
+            { "time": "13:30", "type": "Sightseeing", "location": "草千里之濱、阿蘇火山口景觀", "note": "", "cost": 0 },
+            { "time": "19:30", "type": "Food", "location": "別府車站周邊", "note": "食道樂 とさか (炭火燒地雞)", "cost": 3500 },
+            { "time": "22:00", "type": "Hotel", "location": "別府 AMANEK", "note": "住宿", "cost": 16500 }
+          ]
+        },
+        {
+          "day": 3,
+          "date": "2026-05-09",
+          "city": "別府",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "09:00", "type": "Food", "location": "別府高人氣精品咖啡", "note": "In Bloom Coffee (飯店車程8分)", "cost": 800 },
+            { "time": "10:30", "type": "Sightseeing", "location": "由布院散策、金鱗湖、湯之坪街道", "note": "", "cost": 0 },
+            { "time": "12:00", "type": "Food", "location": "由布院名店", "note": "鰻之成瀨 (極上鰻魚重)", "cost": 2500 },
+            { "time": "15:30", "type": "Sightseeing", "location": "別府地獄巡禮 (海、血池地獄)", "note": "", "cost": 0 },
+            { "time": "19:30", "type": "Food", "location": "別府市區", "note": "三湯拉麵 (豚骨拉麵/煎餃)", "cost": 1000 },
+            { "time": "22:00", "type": "Hotel", "location": "別府 AMANEK", "note": "住宿", "cost": 16500 }
+          ]
+        },
+        {
+          "day": 4,
+          "date": "2026-05-10",
+          "city": "福岡",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "08:30", "type": "Food", "location": "別府飯店周邊", "note": "Kamenos (老屋改裝咖啡)", "cost": 1000 },
+            { "time": "10:00", "type": "Sightseeing", "location": "九州自然動物園", "note": "自駕入場", "cost": 0 },
+            { "time": "13:00", "type": "Food", "location": "湯布院/別府周邊", "note": "山椒咖哩烏龍麵 菊すけ", "cost": 1500 },
+            { "time": "15:30", "type": "Shopping", "location": "鳥栖 Premium Outlets", "note": "", "cost": 0 },
+            { "time": "20:30", "type": "Food", "location": "福岡頂級料亭", "note": "稚加榮 料亭 (活魚刺身/明太子)", "cost": 6000 },
+            { "time": "22:00", "type": "Hotel", "location": "西鐵格蘭登飯店", "note": "住宿", "cost": 15000 }
+          ]
+        },
+        {
+          "day": 5,
+          "date": "2026-05-11",
+          "city": "福岡",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "09:00", "type": "Food", "location": "天神區最強咖啡", "note": "REC COFFEE (岩田屋店)", "cost": 800 },
+            { "time": "11:00", "type": "Food", "location": "福岡市區高級壽司", "note": "鮨 紫 壽司 (師傅發辦早午餐)", "cost": 5000 },
+            { "time": "14:00", "type": "Sightseeing", "location": "能古島賞花", "note": "自駕上渡輪、泊車", "cost": 0 },
+            { "time": "20:30", "type": "Food", "location": "博多文化體驗", "note": "天神屋台 (博多在地美食)", "cost": 2500 },
+            { "time": "22:00", "type": "Hotel", "location": "西鐵格蘭登飯店", "note": "住宿", "cost": 15000 }
+          ]
+        },
+        {
+          "day": 6,
+          "date": "2026-05-12",
+          "city": "福岡",
+          "weather": { "forecast_unavailable": true },
+          "activities": [
+            { "time": "09:00", "type": "Food", "location": "柳橋連合市場", "note": "海鮮丼 / 明太子飯糰", "cost": 2000 },
+            { "time": "11:30", "type": "Food", "location": "天神手沖老店", "note": "珈琲美美 (大濠公園旁)", "cost": 800 },
+            { "time": "16:15", "type": "Transport", "location": "CX529 FUK→HKG", "note": "航班", "cost": 0 }
+          ]
+        }
+      ]
+    }
+  ]
+}
