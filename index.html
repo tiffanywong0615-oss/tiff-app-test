@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>2026 九州六日自駕美食之旅</title>
 
-  <!-- Fonts (safe for GitHub Pages) -->
-  https://fonts.googleapis.com
-  https://fonts.gstatic.com
-  https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap
+  <!-- ✅ FIX: Proper Google Fonts links (NOT raw URLs) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
     :root{
@@ -37,12 +40,12 @@
 
       --safe-top: env(safe-area-inset-top);
       --safe-bottom: env(safe-area-inset-bottom);
-
       --nav-h: 74px;
     }
 
     *{ box-sizing:border-box; }
     html, body { height: 100%; }
+
     body{
       margin:0;
       font-family: "Inter","Noto Sans TC","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -53,7 +56,7 @@
         linear-gradient(180deg, rgba(255,248,251,1) 0%, rgba(255,255,255,1) 40%, rgba(255,250,240,1) 100%);
     }
 
-    /* floral pattern overlay */
+    /* Floral pattern overlay (no external images) */
     body::before{
       content:"";
       position: fixed;
@@ -79,7 +82,7 @@
       margin: 0 auto;
       padding: 16px;
       padding-top: calc(10px + var(--safe-top));
-      padding-bottom: calc(var(--nav-h) + 18px + var(--safe-bottom)); /* room for bottom nav */
+      padding-bottom: calc(var(--nav-h) + 18px + var(--safe-bottom));
     }
 
     /* Hero */
@@ -177,6 +180,10 @@
     .k{ font-size: .82rem; color: var(--muted); }
     .v{ margin-top: 6px; font-weight: 900; font-size: 1.05rem; }
 
+    /* views */
+    .view{ display:none; }
+    .view.active{ display:block; }
+
     /* controls */
     .controls{
       display:flex;
@@ -230,11 +237,33 @@
       color: #0E7A3B;
     }
 
-    /* views */
-    .view{ display:none; }
-    .view.active{ display:block; }
+    /* Home: day strip */
+    .daystrip{
+      margin-top: 10px;
+      display:flex;
+      gap: 8px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+    .daybtn{
+      border: 1px solid var(--line);
+      background:#fff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      min-width: 72px;
+      font-weight: 1000;
+      cursor:pointer;
+      white-space:nowrap;
+      transition:.12s ease;
+    }
+    .daybtn.active{
+      background: rgba(255,111,174,.12);
+      border-color: rgba(255,111,174,.24);
+      color: #B4235A;
+    }
 
-    /* itinerary tabbar */
+    /* Itinerary tabbar */
     .tabbar{
       margin-top: 12px;
       background: rgba(255,255,255,.94);
@@ -439,6 +468,7 @@
       border-radius: var(--r16);
       background: #fff;
       box-shadow: var(--shadow2);
+      cursor: pointer;
     }
     .row .label{ font-weight: 900; }
     .row .sub{ color: var(--muted); font-size: .86rem; margin-top: 2px; }
@@ -483,6 +513,7 @@
       display:flex;
       gap: 10px;
       align-items:center;
+      margin-top: 10px;
     }
     .todo-input input{
       flex: 1 1 auto;
@@ -586,36 +617,9 @@
       color: #B4235A;
     }
 
-    /* Mini day strip (only on Home view) */
-    .daystrip{
-      margin-top: 10px;
-      display:flex;
-      gap: 8px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
-    }
-    .daybtn{
-      border: 1px solid var(--line);
-      background:#fff;
-      border-radius: 14px;
-      padding: 10px 12px;
-      min-width: 72px;
-      font-weight: 1000;
-      cursor:pointer;
-      white-space:nowrap;
-      transition:.12s ease;
-    }
-    .daybtn.active{
-      background: rgba(255,111,174,.12);
-      border-color: rgba(255,111,174,.24);
-      color: #B4235A;
-    }
-
-    /* Responsive tweaks */
+    /* Responsive */
     @media (min-width: 860px){
       .grid{ grid-template-columns: 1.2fr .8fr; }
-      .container{ padding-bottom: calc(var(--nav-h) + 30px + var(--safe-bottom)); }
       .left{ width: 86px; flex: 0 0 86px; }
     }
     @media (max-width: 520px){
@@ -681,12 +685,10 @@
             </div>
           </div>
 
-          <!-- thumb-friendly day strip -->
           <div class="daystrip" id="dayStrip" aria-label="快速切換日程"></div>
         </div>
       </section>
 
-      <!-- Itinerary -->
       <section class="tabbar" aria-label="行程日程">
         <div class="tablist" role="tablist" id="tablist"></div>
         <div id="panels"></div>
@@ -712,7 +714,7 @@
               <div class="v" id="budgetMaxDay">—</div>
             </div>
           </div>
-          <div class="k" style="margin-top:10px;">提示：以下 breakdown 會按你行程 cost 自動計算。</div>
+          <div class="k" style="margin-top:10px;">提示：以下 breakdown 會按行程 cost 自動計算。</div>
         </div>
 
         <div class="card">
@@ -735,7 +737,6 @@
         <div class="card">
           <h2 class="section-title">To buy list（購物清單）</h2>
           <div class="k">✅ 支援新增 / 勾選完成 / 刪除；會自動儲存（localStorage）。</div>
-          <div style="height:10px"></div>
 
           <div class="todo-input">
             <input id="todoInput" type="text" placeholder="例如：防曬、雨傘、零食、藥品…" />
@@ -743,7 +744,6 @@
           </div>
 
           <div class="todo-list" id="todoList"></div>
-
           <div class="k" id="todoHint" style="margin-top:10px;"></div>
         </div>
       </section>
@@ -754,13 +754,13 @@
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav" aria-label="底部導覽">
     <div class="navwrap">
-      <button class="navbtn active" data-view="home" id="navHome">
+      <button class="navbtn active" data-view="home">
         <div class="ico">🏠</div><div class="txt">Home</div>
       </button>
-      <button class="navbtn" data-view="budget" id="navBudget">
+      <button class="navbtn" data-view="budget">
         <div class="ico">💴</div><div class="txt">Budget</div>
       </button>
-      <button class="navbtn" data-view="tobuy" id="navToBuy">
+      <button class="navbtn" data-view="tobuy">
         <div class="ico">🛍️</div><div class="txt">To buy list</div>
       </button>
     </div>
@@ -843,29 +843,21 @@
     }
   ];
 
-  // =============================
   // Helpers
-  // =============================
   const yen = (n) => "¥" + (Number(n)||0).toLocaleString("en-US");
   const mapUrl = (q) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
-
   const sumDay = (d) => d.items.reduce((acc, it)=> acc + (Number(it.cost)||0), 0);
   const sumAll = () => days.reduce((acc, d)=> acc + sumDay(d), 0);
 
-  // =============================
   // State
-  // =============================
   let activeDay = 1;
   let activeType = "ALL";
   let paidOnly = false;
 
-  // =============================
   // Elements
-  // =============================
   const viewHome = document.getElementById("view-home");
   const viewBudget = document.getElementById("view-budget");
   const viewToBuy = document.getElementById("view-tobuy");
-
   const navButtons = Array.from(document.querySelectorAll(".navbtn"));
 
   const tablist = document.getElementById("tablist");
@@ -894,9 +886,7 @@
   const todoListEl = document.getElementById("todoList");
   const todoHintEl = document.getElementById("todoHint");
 
-  // =============================
-  // Render: Home (tabs + panels + day strip)
-  // =============================
+  // ========== Home render ==========
   function renderDayStrip(){
     dayStrip.innerHTML = "";
     days.forEach(d => {
@@ -980,8 +970,9 @@
       item.dataset.cost = String(it.cost || 0);
       item.dataset.text = (it.note || "") + " " + (it.map || "");
 
+      // ✅ FIX: Always create proper <a> tag when map exists
       const mapBtn = it.map
-        ? `${mapUrl(it.map)}🗺️ 地圖</a>`
+        ? `<a class="map" href="${mapUrl(it.map)}" target="_blank" rel="noopener">🗺️ 地圖</a>`
         : "";
 
       item.innerHTML = `
@@ -990,7 +981,7 @@
           <div class="type">${it.icon || "•"} ${it.type}</div>
         </div>
         <div class="body">
-          <div class="mainline">${it.note}</div>
+          <div class="mainline">${escapeHtml(it.note)}</div>
           <div class="meta">
             ${mapBtn}
             <div class="cost">${yen(it.cost||0)}</div>
@@ -1001,9 +992,6 @@
     });
   }
 
-  // =============================
-  // Home: Budget tiles + filtering
-  // =============================
   function computeHomeTotals(){
     totalBudgetEl.textContent = yen(sumAll());
   }
@@ -1039,12 +1027,12 @@
     filteredBudgetEl.textContent = yen(sum);
     if (empty) empty.style.display = shown === 0 ? "block" : "none";
 
-    // update daystrip active
+    // update day strip active
     Array.from(dayStrip.querySelectorAll(".daybtn")).forEach((b, idx) => {
       b.classList.toggle("active", idx+1 === activeDay);
     });
 
-    // update tab active
+    // update tabs active
     Array.from(tablist.querySelectorAll(".tab")).forEach((t, idx) => {
       const isActive = idx+1 === activeDay;
       t.setAttribute("aria-selected", isActive ? "true":"false");
@@ -1054,7 +1042,6 @@
 
   function setDay(dayId){
     activeDay = dayId;
-
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
     const activePanel = document.getElementById(`panel-day${dayId}`);
     if (activePanel) activePanel.classList.add("active");
@@ -1085,21 +1072,16 @@
     applyFilters();
   }
 
-  // =============================
-  // Budget view render
-  // =============================
+  // ========== Budget view ==========
   function renderBudgetView(){
     const total = sumAll();
     budgetTotalEl.textContent = yen(total);
-
-    const avg = total / days.length;
-    budgetAvgEl.textContent = yen(avg);
+    budgetAvgEl.textContent = yen(total / days.length);
 
     let maxDay = days[0];
     days.forEach(d => { if (sumDay(d) > sumDay(maxDay)) maxDay = d; });
     budgetMaxDayEl.textContent = `第${maxDay.id}天｜${yen(sumDay(maxDay))}`;
 
-    // per-day breakdown
     budgetByDayEl.innerHTML = "";
     days.forEach(d => {
       const row = document.createElement("div");
@@ -1107,26 +1089,22 @@
       row.innerHTML = `
         <div>
           <div class="label">第${d.id}天</div>
-          <div class="sub">${d.title.replace(/^.*第\\d天\\s-\\s/, "")}</div>
+          <div class="sub">${escapeHtml(d.title.replace(/^.*第\\d天\\s-\\s/, ""))}</div>
         </div>
         <div class="right">${yen(sumDay(d))}</div>
       `;
       row.addEventListener("click", () => {
-        // jump to Home + set day
         switchView("home");
         setDay(d.id);
       });
       budgetByDayEl.appendChild(row);
     });
 
-    // type breakdown
     const types = ["餐飲","交通","住宿","景點","購物"];
     const typeTotals = Object.fromEntries(types.map(t => [t, 0]));
-    days.forEach(d => {
-      d.items.forEach(it => {
-        if (typeTotals[it.type] !== undefined) typeTotals[it.type] += (Number(it.cost)||0);
-      });
-    });
+    days.forEach(d => d.items.forEach(it => {
+      if (typeTotals[it.type] !== undefined) typeTotals[it.type] += (Number(it.cost)||0);
+    }));
 
     const maxTypeValue = Math.max(...Object.values(typeTotals), 1);
 
@@ -1147,29 +1125,18 @@
     });
   }
 
-  // =============================
-  // Bottom navigation (views)
-  // =============================
+  // ========== Bottom nav views ==========
   function switchView(view){
-    // views
     viewHome.classList.toggle("active", view === "home");
     viewBudget.classList.toggle("active", view === "budget");
     viewToBuy.classList.toggle("active", view === "tobuy");
-
-    // nav states
     navButtons.forEach(b => b.classList.toggle("active", b.dataset.view === view));
-
-    // render on demand
     if (view === "budget") renderBudgetView();
   }
 
-  navButtons.forEach(btn => {
-    btn.addEventListener("click", () => switchView(btn.dataset.view));
-  });
+  navButtons.forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
 
-  // =============================
-  // To buy list (localStorage)
-  // =============================
+  // ========== To buy list (localStorage) ==========
   const STORAGE_KEY = "kyushu_tobuy_v1";
   let todos = [];
 
@@ -1244,15 +1211,10 @@
   }
 
   addTodoBtn.addEventListener("click", addTodo);
-  todoInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") addTodo();
-  });
+  todoInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addTodo(); });
 
-  // =============================
-  // Init
-  // =============================
+  // ========== Init ==========
   function init(){
-    // Home
     renderDayStrip();
     renderTabs();
     renderPanels();
@@ -1261,13 +1223,11 @@
     setActiveChip("ALL");
     applyFilters();
 
-    // Home events
     chips.forEach(ch => ch.addEventListener("click", ()=> setActiveChip(ch.dataset.filter)));
     paidOnlyChip.addEventListener("click", togglePaidOnly);
     resetBtn.addEventListener("click", resetAll);
     searchInput.addEventListener("input", applyFilters);
 
-    // To buy
     loadTodos();
     renderTodos();
   }
