@@ -1,114 +1,147 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>2026 九州六日自駕美食之旅</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Optional fonts (works on GitHub Pages) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet" />
+
   <style>
-    body { font-family: "Inter", "Noto Sans JP", sans-serif; background-color: #F8F9FA; margin:0; padding:0; }
-    .container { max-width: 900px; margin: auto; padding: 20px; }
-    h1 { color: #BC002D; text-align:center; margin-bottom: 30px; }
-    .day-card { background: white; border-radius: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
-    .day-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; }
-    .activity { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-    .activity:last-child { border-bottom: none; }
-    .activity-type { font-weight: bold; color: #BC002D; margin-right: 10px; min-width: 70px; }
-    .activity-time { color: #2D3436; width: 60px; }
-    .activity-note { flex:1; color:#2D3436; }
-    .activity-cost { color: #00A86B; margin-left: 10px; min-width:50px; text-align:right; }
-    .weather { color: #FFB7C5; font-weight: bold; }
-    @media(max-width:600px){
-      .day-header { flex-direction: column; align-items:flex-start; }
-      .activity { flex-direction: column; align-items:flex-start; }
-      .activity-cost { text-align:left; margin-top:5px; }
+    :root{
+      --brand:#BC002D;
+      --bg:#F6F7FB;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --good:#0ea66a;
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+      --shadow2:0 2px 10px rgba(0,0,0,.06);
+      --radius:18px;
+      --radius2:999px;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>2026 九州六日自駕美食之旅</h1>
 
-    <!-- Day 1 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第1天 - 2026-05-07 (熊本)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">08:15</span><span class="activity-type">交通</span><span class="activity-note">CX512 HKG→FUK 航班</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">14:00</span><span class="activity-type">交通</span><span class="activity-note">租車公司取車 (大7人車)</span><span class="activity-cost">¥18000</span></div>
-      <div class="activity"><span class="activity-time">15:00</span><span class="activity-type">餐飲</span><span class="activity-note">太宰府天滿宮周邊 - 和牛明太神樂 (和牛明太子蓋飯)</span><span class="activity-cost">¥2500</span></div>
-      <div class="activity"><span class="activity-time">16:30</span><span class="activity-type">景點</span><span class="activity-note">太宰府天滿宮參拜、星巴克咖啡</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">19:30</span><span class="activity-type">餐飲</span><span class="activity-note">熊本下通購物街 - 馬櫻 馬肉料理 (馬肉刺身/燒肉)</span><span class="activity-cost">¥5000</span></div>
-      <div class="activity"><span class="activity-time">21:00</span><span class="activity-type">購物</span><span class="activity-note">下通購物街</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">22:30</span><span class="activity-type">住宿</span><span class="activity-note">熊本花開酒店</span><span class="activity-cost">¥13200</span></div>
-    </div>
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Inter","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;
+      background: radial-gradient(1200px 600px at 15% -10%, rgba(188,0,45,.10), transparent 55%),
+                  radial-gradient(900px 500px at 85% 0%, rgba(14,166,106,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .container{
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header{
+      text-align:center;
+      padding: 8px 0 14px;
+    }
+    h1{
+      margin: 10px 0 6px;
+      color:var(--brand);
+      font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size: .98rem;
+    }
 
-    <!-- Day 2 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第2天 - 2026-05-08 (別府)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">08:30</span><span class="activity-type">餐飲</span><span class="activity-note">熊本飯店周邊 - Licht Coffee & Cakes (精品手沖)</span><span class="activity-cost">¥800</span></div>
-      <div class="activity"><span class="activity-time">10:30</span><span class="activity-type">景點</span><span class="activity-note">阿蘇大觀峰 展望台</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">12:00</span><span class="activity-type">餐飲</span><span class="activity-note">阿蘇景觀餐廳 - 阿蘇庭 山見茶屋 (赤牛丼)</span><span class="activity-cost">¥2000</span></div>
-      <div class="activity"><span class="activity-time">13:30</span><span class="activity-type">景點</span><span class="activity-note">草千里之濱、阿蘇火山口景觀</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">19:30</span><span class="activity-type">餐飲</span><span class="activity-note">別府車站周邊 - 食道樂 とさか (炭火燒地雞)</span><span class="activity-cost">¥3500</span></div>
-      <div class="activity"><span class="activity-time">22:00</span><span class="activity-type">住宿</span><span class="activity-note">別府 AMANEK</span><span class="activity-cost">¥16500</span></div>
-    </div>
+    /* Summary */
+    .summary-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin: 18px 0 14px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(229,231,235,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      padding: 16px;
+    }
+    .summary-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius2);
+      background: rgba(188,0,45,.08);
+      border: 1px solid rgba(188,0,45,.20);
+      color: var(--brand);
+      font-weight: 800;
+      font-size:.95rem;
+      white-space:nowrap;
+    }
+    .stat-row{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .stat{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
+    }
+    .stat .k{
+      color: var(--muted);
+      font-size: .85rem;
+      margin-bottom: 4px;
+    }
+    .stat .v{
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+    .hint{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .85rem;
+      line-height: 1.35;
+    }
 
-    <!-- Day 3 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第3天 - 2026-05-09 (別府)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">09:00</span><span class="activity-type">餐飲</span><span class="activity-note">別府高人氣精品咖啡 - In Bloom Coffee (飯店車程8分)</span><span class="activity-cost">¥800</span></div>
-      <div class="activity"><span class="activity-time">10:30</span><span class="activity-type">景點</span><span class="activity-note">由布院散策、金鱗湖、湯之坪街道</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">12:00</span><span class="activity-type">餐飲</span><span class="activity-note">由布院名店 - 鰻之成瀨 (極上鰻魚重)</span><span class="activity-cost">¥2500</span></div>
-      <div class="activity"><span class="activity-time">15:30</span><span class="activity-type">景點</span><span class="activity-note">別府地獄巡禮 (海、血池地獄)</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">19:30</span><span class="activity-type">餐飲</span><span class="activity-note">別府市區 - 三湯拉麵 (豚骨拉麵/煎餃)</span><span class="activity-cost">¥1000</span></div>
-      <div class="activity"><span class="activity-time">22:00</span><span class="activity-type">住宿</span><span class="activity-note">別府 AMANEK</span><span class="activity-cost">¥16500</span></div>
-    </div>
-
-    <!-- Day 4 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第4天 - 2026-05-10 (福岡)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">08:30</span><span class="activity-type">餐飲</span><span class="activity-note">別府飯店周邊 - Kamenos (老屋改裝咖啡)</span><span class="activity-cost">¥1000</span></div>
-      <div class="activity"><span class="activity-time">10:00</span><span class="activity-type">景點</span><span class="activity-note">九州自然動物園 (自駕入場)</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">13:00</span><span class="activity-type">餐飲</span><span class="activity-note">湯布院/別府周邊 - 山椒咖哩烏龍麵 菊すけ</span><span class="activity-cost">¥1500</span></div>
-      <div class="activity"><span class="activity-time">15:30</span><span class="activity-type">購物</span><span class="activity-note">鳥栖 Premium Outlets</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">20:30</span><span class="activity-type">餐飲</span><span class="activity-note">福岡頂級料亭 - 稚加榮 料亭 (活魚刺身/明太子)</span><span class="activity-cost">¥6000</span></div>
-      <div class="activity"><span class="activity-time">22:00</span><span class="activity-type">住宿</span><span class="activity-note">西鐵格蘭登飯店</span><span class="activity-cost">¥15000</span></div>
-    </div>
-
-    <!-- Day 5 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第5天 - 2026-05-11 (福岡)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">09:00</span><span class="activity-type">餐飲</span><span class="activity-note">天神區最強咖啡 - REC COFFEE (岩田屋店)</span><span class="activity-cost">¥800</span></div>
-      <div class="activity"><span class="activity-time">11:00</span><span class="activity-type">餐飲</span><span class="activity-note">福岡市區高級壽司 - 鮨 紫 壽司 (師傅發辦早午餐)</span><span class="activity-cost">¥5000</span></div>
-      <div class="activity"><span class="activity-time">14:00</span><span class="activity-type">景點</span><span class="activity-note">能古島賞花 (自駕上渡輪、泊車)</span><span class="activity-cost">¥0</span></div>
-      <div class="activity"><span class="activity-time">20:30</span><span class="activity-type">餐飲</span><span class="activity-note">博多文化體驗 - 天神屋台 (博多在地美食)</span><span class="activity-cost">¥2500</span></div>
-      <div class="activity"><span class="activity-time">22:00</span><span class="activity-type">住宿</span><span class="activity-note">西鐵格蘭登飯店</span><span class="activity-cost">¥15000</span></div>
-    </div>
-
-    <!-- Day 6 -->
-    <div class="day-card">
-      <div class="day-header">
-        <span>第6天 - 2026-05-12 (福岡)</span>
-        <span class="weather">(天氣資料尚未提供)</span>
-      </div>
-      <div class="activity"><span class="activity-time">09:00</span><span class="activity-type">餐飲</span><span class="activity-note">柳橋連合市場 - 海鮮丼 / 明太子飯糰</span><span class="activity-cost">¥2000</span></div>
-      <div class="activity"><span class="activity-time">11:30</span><span class="activity-type">餐飲</span><span class="activity-note">天神手沖老店 - 珈琲美美 (大濠公園旁)</span><span class="activity-cost">¥800</span></div>
-      <div class="activity"><span class="activity-time">16:15</span><span class="activity-type">交通</span><span class="activity-note">CX529 FUK→HKG 航班</span><span class="activity-cost">¥0</span></div>
-    </div>
-
-  </div>
-</body>
-</html>
+    /* Filters */
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .search-wrap{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex: 1 1 360px;
+      min-width: 260px;
+    }
+    .search{
+      flex: 1 1 auto;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background:#fff;
+    }
+    .search input{
+      border:0;
+      outline:none;
+      width:100%;
