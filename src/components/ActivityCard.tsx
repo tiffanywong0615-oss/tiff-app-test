@@ -17,13 +17,13 @@ interface ActivityCardProps {
     translatedNotes?: string;
 }
 
-const typeConfig: Record<Activity['type'], { color: string; label: string; Icon: React.ElementType }> = {
-    Food:        { color: '#F97316', label: '餐飲',   Icon: UtensilsCrossed },
-    Sightseeing: { color: '#3B82F6', label: '觀光',   Icon: Camera },
-    Transport:   { color: '#22C55E', label: '交通',   Icon: Train },
-    Hotel:       { color: '#A855F7', label: '飯店',   Icon: Building },
-    Shopping:    { color: '#EC4899', label: '購物',   Icon: ShoppingBag },
-    Other:       { color: '#94A3B8', label: '其他',   Icon: MoreHorizontal },
+const typeConfig: Record<Activity['type'], { color: string; Icon: React.ElementType }> = {
+    Food:        { color: '#F97316', Icon: UtensilsCrossed },
+    Sightseeing: { color: '#3B82F6', Icon: Camera },
+    Transport:   { color: '#22C55E', Icon: Train },
+    Hotel:       { color: '#A855F7', Icon: Building },
+    Shopping:    { color: '#EC4899', Icon: ShoppingBag },
+    Other:       { color: '#94A3B8', Icon: MoreHorizontal },
 };
 
 function formatCost(cost: number, costCurrency?: 'JPY' | 'HKD'): string {
@@ -42,7 +42,8 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
     const { t } = useLanguage();
     const [isEditing, setIsEditing] = useState(false);
 
-    const { color, label, Icon } = typeConfig[activity.type] ?? typeConfig.Other;
+    const { color, Icon } = typeConfig[activity.type] ?? typeConfig.Other;
+    const label = t.activityTypes[activity.type] ?? activity.type;
 
     const displayLocation = translatedLocation || activity.location;
     const displayNotes = translatedNotes || activity.notes;
@@ -66,7 +67,7 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                     <p className="activity-location">{displayLocation}</p>
 
                     {displayNotes && (
-                        <p className="activity-highlights">✨ 亮點：{displayNotes}</p>
+                        <p className="activity-highlights">✨ {t.highlights}{displayNotes}</p>
                     )}
                     {activity.mapQuery && (
                         <div className="activity-map-buttons">
@@ -94,7 +95,6 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                     <div className="activity-footer">
                         <div>
                             <span className="activity-cost">💴 {formatCost(activity.cost, activity.costCurrency)}</span>
-                            <span className="activity-cost-disclaimer">（示範匯率 / Demo rate）</span>
                         </div>
                         <button
                             className="activity-edit-btn"
@@ -122,4 +122,3 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
 };
 
 export default ActivityCard;
-
