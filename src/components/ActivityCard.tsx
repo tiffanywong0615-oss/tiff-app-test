@@ -38,9 +38,6 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
   const config = typeConfig[activity.type];
   const Icon = config.icon;
 
-  // Image state
-  const [imgError, setImgError] = useState(false);
-
   // Translation state
   const [translatedLocation, setTranslatedLocation] = useState(activity.location);
   const [translatedNotes, setTranslatedNotes] = useState(activity.notes);
@@ -52,11 +49,6 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
   const [costInput, setCostInput] = useState(String(activity.cost));
 
   const typeLabel = t.activityTypes[activity.type];
-
-  // Reset image error when activity changes
-  useEffect(() => {
-    setImgError(false);
-  }, [activity.mapQuery]);
 
   // Translation effect
   useEffect(() => {
@@ -84,9 +76,6 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
       setIsTranslating(false);
     });
   }, [language, activity.id, activity.location, activity.notes]);
-
-  // Photo URL: type-specific Unsplash keyword
-  const photoUrl = `https://source.unsplash.com/400x200/?${config.keyword}`;
 
   // Cost editing handlers
   const handleStartEdit = () => {
@@ -125,19 +114,19 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
         'flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 mb-3 overflow-hidden',
         'hover:shadow-md hover:border-pink-100 transition-all duration-200'
       )}>
-        {/* Destination photo */}
-        {activity.mapQuery && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={photoUrl}
-            alt={activity.location}
-            className="w-full h-32 object-cover"
-            onError={() => setImgError(true)}
-            loading="lazy"
-          />
-        ) : activity.mapQuery ? (
-          <div className={`w-full h-32 bg-gradient-to-br ${config.gradient}`} />
-        ) : null}
+        {/* Destination map preview */}
+        {activity.mapQuery && (
+          <div className="w-full h-36 overflow-hidden">
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(activity.mapQuery)}&output=embed&z=15&hl=en`}
+              className="w-full h-full border-0 pointer-events-none"
+              loading="lazy"
+              title={activity.location}
+              aria-label={activity.location}
+              sandbox="allow-scripts"
+            />
+          </div>
+        )}
 
         <div className={cn('p-4', isTranslating && 'opacity-70 transition-opacity duration-300')}>
           <div className="flex items-start justify-between gap-2">
