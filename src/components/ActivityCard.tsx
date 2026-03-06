@@ -1,7 +1,14 @@
 import React from 'react';
 import './ActivityCard.css';
+import { Activity } from '@/types';
 
-const ActivityCard = ({ activity }) => {
+interface ActivityCardProps {
+    activity: Activity;
+    tripId?: string;    // reserved for future use (e.g. edit/delete actions)
+    dayIndex?: number;  // reserved for future use (e.g. edit/delete actions)
+}
+
+const ActivityCard = ({ activity }: ActivityCardProps) => {
     const { type, location, mapQuery } = activity;
     const [photoUrl, setPhotoUrl] = React.useState('');
 
