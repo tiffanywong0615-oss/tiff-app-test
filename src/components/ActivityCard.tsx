@@ -7,11 +7,14 @@ import { useTripContext } from '@/context/TripContext';
 import { useLanguage } from '@/context/LanguageContext';
 import EditActivityModal from './EditActivityModal';
 import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil, Clock, MapPin, ParkingCircle } from 'lucide-react';
+import { JPY_TO_HKD } from '@/lib/currency';
 
 interface ActivityCardProps {
     activity: Activity;
     tripId: string;
     dayIndex: number;
+    translatedLocation?: string;
+    translatedNotes?: string;
 }
 
 const typeConfig: Record<Activity['type'], { color: string; label: string; Icon: React.ElementType }> = {
@@ -23,12 +26,26 @@ const typeConfig: Record<Activity['type'], { color: string; label: string; Icon:
     Other:       { color: '#94A3B8', label: '其他',   Icon: MoreHorizontal },
 };
 
-const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
+function formatCost(cost: number, costCurrency?: 'JPY' | 'HKD'): string {
+    if (costCurrency === 'HKD') {
+        const hkd = cost;
+        const jpy = Math.round(cost / JPY_TO_HKD);
+        return `HK$${hkd.toLocaleString()} / ¥${jpy.toLocaleString()}`;
+    }
+    const jpy = cost;
+    const hkd = Math.round(jpy * JPY_TO_HKD);
+    return `¥${jpy.toLocaleString()} / HK$${hkd.toLocaleString()}`;
+}
+
+const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translatedNotes }: ActivityCardProps) => {
     const { updateActivity } = useTripContext();
     const { t } = useLanguage();
     const [isEditing, setIsEditing] = useState(false);
 
     const { color, label, Icon } = typeConfig[activity.type] ?? typeConfig.Other;
+
+    const displayLocation = translatedLocation || activity.location;
+    const displayNotes = translatedNotes || activity.notes;
 
     return (
         <>
@@ -46,10 +63,10 @@ const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
                         </span>
                     </div>
 
-                    <p className="activity-location">{activity.location}</p>
+                    <p className="activity-location">{displayLocation}</p>
 
-                    {activity.notes && (
-                        <p className="activity-highlights">✨ 亮點：{activity.notes}</p>
+                    {displayNotes && (
+                        <p className="activity-highlights">✨ 亮點：{displayNotes}</p>
                     )}
                     {activity.mapQuery && (
                         <div className="activity-map-buttons">
@@ -75,7 +92,10 @@ const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
                     )}
 
                     <div className="activity-footer">
-                        <span className="activity-cost">💴 ¥{activity.cost.toLocaleString()}</span>
+                        <div>
+                            <span className="activity-cost">💴 {formatCost(activity.cost, activity.costCurrency)}</span>
+                            <span className="activity-cost-disclaimer">（示範匯率 / Demo rate）</span>
+                        </div>
                         <button
                             className="activity-edit-btn"
                             onClick={() => setIsEditing(true)}
@@ -102,3 +122,4 @@ const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
 };
 
 export default ActivityCard;
+

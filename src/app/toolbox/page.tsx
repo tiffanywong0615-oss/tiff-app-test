@@ -5,9 +5,7 @@ import { useTripContext } from '@/context/TripContext';
 import { useLanguage } from '@/context/LanguageContext';
 import TopHeader from '@/components/TopHeader';
 import { Check, Plus, Wrench, ArrowLeftRight, CheckSquare } from 'lucide-react';
-
-/** Demonstration exchange rate only — not a live rate. Always check current rates before travelling. */
-const JPY_TO_HKD = 0.055;
+import { JPY_TO_HKD } from '@/lib/currency';
 
 export default function ToolboxPage() {
   const { trips, toggleChecklistItem, addChecklistItem } = useTripContext();

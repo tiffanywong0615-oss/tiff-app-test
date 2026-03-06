@@ -137,8 +137,48 @@
   transition: color 0.2s;
 }
 
-.activity-edit-btn:hover {
-  color: #FF6FAE;
-  background: #FFF0F6;
+.activity-cost-disclaimer {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-left: 4px;
+}
+
+.driving-segment {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 12px;
+  padding: 10px 14px;
+  background: #F0FDF4;
+  border-radius: 12px;
+  border: 1px solid #BBF7D0;
+}
+
+.driving-segment-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803D;
+}
+
+.driving-segment-rest {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: #92400E;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.driving-segment-rest a {
+  color: #D97706;
+  font-weight: 600;
+  text-decoration: underline;
+  white-space: nowrap;
 }
 
