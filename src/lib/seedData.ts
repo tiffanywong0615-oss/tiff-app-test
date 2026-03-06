@@ -33,6 +33,7 @@ export function getSeedData(): Trip[] {
         { id: uuidv4(), item: '雨具', completed: false },
         { id: uuidv4(), item: '轉接頭', completed: false },
       ],
+      shoppingList: [],
       dailyItinerary: [
         {
           day: 1,
