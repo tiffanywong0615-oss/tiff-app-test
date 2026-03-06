@@ -48,6 +48,31 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
   const [isEditingCost, setIsEditingCost] = useState(false);
   const [costInput, setCostInput] = useState(String(activity.cost));
 
+  // Photo state
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState(false);
+
+  // Fetch Wikipedia thumbnail photo
+  useEffect(() => {
+    if (!activity.mapQuery) return;
+    setPhotoUrl(null);
+    setPhotoError(false);
+
+    const controller = new AbortController();
+    const title = encodeURIComponent(activity.mapQuery.trim());
+    fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${title}`, { signal: controller.signal })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then((data: { thumbnail?: { source: string } }) => {
+        if (data?.thumbnail?.source) {
+          setPhotoUrl(data.thumbnail.source);
+        } else {
+          setPhotoError(true);
+        }
+      })
+      .catch(err => { if (err?.name !== 'AbortError') setPhotoError(true); });
+    return () => controller.abort();
+  }, [activity.mapQuery]);
+
   const typeLabel = t.activityTypes[activity.type];
 
   // Translation effect
@@ -114,17 +139,25 @@ export default function ActivityCard({ activity, tripId, dayIndex }: ActivityCar
         'flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 mb-3 overflow-hidden',
         'hover:shadow-md hover:border-pink-100 transition-all duration-200'
       )}>
-        {/* Destination map preview */}
+        {/* Destination photo */}
         {activity.mapQuery && (
-          <div className="w-full h-36 overflow-hidden">
-            <iframe
-              src={`https://www.google.com/maps?q=${encodeURIComponent(activity.mapQuery)}&output=embed&z=15&hl=en`}
-              className="w-full h-full border-0 pointer-events-none"
-              loading="lazy"
-              title={activity.location}
-              aria-label={activity.location}
-              sandbox="allow-scripts"
-            />
+          <div className="w-full h-36 overflow-hidden bg-gray-100">
+            {photoUrl && !photoError ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={photoUrl}
+                alt={activity.location}
+                className="w-full h-full object-cover"
+                onError={() => setPhotoError(true)}
+              />
+            ) : photoError ? (
+              <div className={`w-full h-full bg-gradient-to-br ${config.gradient} flex items-center justify-center`}>
+                <Icon className="w-8 h-8 text-white/60" />
+              </div>
+            ) : (
+              // Loading skeleton
+              <div className="w-full h-full animate-pulse bg-gray-200" />
+            )}
           </div>
         )}
 
