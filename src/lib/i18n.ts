@@ -30,6 +30,7 @@ export interface Translations {
   addItemPlaceholder: string;
   currencyConverter: string;
   quickConvert: string;
+  highlights: string;
   weather: {
     sunny: string;
     cloudy: string;
@@ -93,6 +94,7 @@ export const translations: Record<Language, Translations> = {
     addItemPlaceholder: '新增項目...',
     currencyConverter: '匯率換算',
     quickConvert: '快速換算',
+    highlights: '亮點：',
     weather: {
       sunny: '晴天',
       cloudy: '陰天',
@@ -154,6 +156,7 @@ export const translations: Record<Language, Translations> = {
     addItemPlaceholder: 'Add item...',
     currencyConverter: 'Currency Converter',
     quickConvert: 'Quick Convert',
+    highlights: 'Highlights: ',
     weather: {
       sunny: 'Sunny',
       cloudy: 'Cloudy',
