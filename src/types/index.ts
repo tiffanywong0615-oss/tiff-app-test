@@ -39,6 +39,15 @@ export interface ChecklistItem {
   completed: boolean;
 }
 
+export interface ShoppingItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  photo: string;
+  bought: boolean;
+}
+
 export interface Trip {
   id: string;
   title: string;
@@ -49,6 +58,7 @@ export interface Trip {
   dailyItinerary: DayItinerary[];
   budget: Budget;
   checklist: ChecklistItem[];
+  shoppingList: ShoppingItem[];
 }
 
 export interface AppData {

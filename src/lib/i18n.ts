@@ -52,6 +52,14 @@ export interface Translations {
   saveCost: string;
   cancelEdit: string;
   nearestParking: string;
+  shoppingList: string;
+  addShoppingItem: string;
+  itemName: string;
+  itemPrice: string;
+  itemQuantity: string;
+  itemPhoto: string;
+  noShoppingItems: string;
+  addItem: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -107,6 +115,14 @@ export const translations: Record<Language, Translations> = {
     saveCost: '確認',
     cancelEdit: '取消',
     nearestParking: '附近停車場',
+    shoppingList: '購物清單',
+    addShoppingItem: '新增購物',
+    itemName: '商品名稱',
+    itemPrice: '價格 (¥)',
+    itemQuantity: '數量',
+    itemPhoto: '加入相片',
+    noShoppingItems: '還沒有購物項目',
+    addItem: '新增',
   },
   en: {
     itinerary: 'Itinerary',
@@ -160,5 +176,13 @@ export const translations: Record<Language, Translations> = {
     saveCost: 'Save',
     cancelEdit: 'Cancel',
     nearestParking: 'Nearest Parking',
+    shoppingList: 'Shopping List',
+    addShoppingItem: 'Add Item',
+    itemName: 'Item Name',
+    itemPrice: 'Price (¥)',
+    itemQuantity: 'Quantity',
+    itemPhoto: 'Add Photo',
+    noShoppingItems: 'No shopping items yet',
+    addItem: 'Add',
   },
 };

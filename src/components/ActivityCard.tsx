@@ -4,8 +4,9 @@ import { useState } from 'react';
 import './ActivityCard.css';
 import { Activity } from '@/types';
 import { useTripContext } from '@/context/TripContext';
+import { useLanguage } from '@/context/LanguageContext';
 import EditActivityModal from './EditActivityModal';
-import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil } from 'lucide-react';
+import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil, Clock, MapPin, ParkingCircle } from 'lucide-react';
 
 interface ActivityCardProps {
     activity: Activity;
@@ -24,6 +25,7 @@ const typeConfig: Record<Activity['type'], { color: string; label: string; Icon:
 
 const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
     const { updateActivity } = useTripContext();
+    const { t } = useLanguage();
     const [isEditing, setIsEditing] = useState(false);
 
     const { color, label, Icon } = typeConfig[activity.type] ?? typeConfig.Other;
@@ -38,7 +40,10 @@ const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
                             <Icon size={12} />
                             {label}
                         </span>
-                        <span className="activity-time">{activity.time}</span>
+                        <span className="activity-time">
+                            <Clock size={13} />
+                            {activity.time}
+                        </span>
                     </div>
 
                     <p className="activity-location">{activity.location}</p>
@@ -47,7 +52,26 @@ const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
                         <p className="activity-highlights">✨ 亮點：{activity.notes}</p>
                     )}
                     {activity.mapQuery && (
-                        <p className="activity-map-query">📍 {activity.mapQuery}</p>
+                        <div className="activity-map-buttons">
+                            <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.mapQuery)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="activity-map-btn"
+                            >
+                                <MapPin size={13} />
+                                {t.viewMap}
+                            </a>
+                            <a
+                                href={`https://www.google.com/maps/search/?api=1&query=parking+near+${encodeURIComponent(activity.mapQuery)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="activity-map-btn activity-map-btn--parking"
+                            >
+                                <ParkingCircle size={13} />
+                                {t.nearestParking}
+                            </a>
+                        </div>
                     )}
 
                     <div className="activity-footer">

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Map, PieChart, ShoppingBag } from 'lucide-react';
+import { Map, PieChart, ShoppingBag, ListChecks } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTripContext } from '@/context/TripContext';
@@ -19,6 +19,7 @@ export default function BottomNav() {
     { href: itineraryHref, label: t.itinerary, icon: Map, test: (p: string) => p.startsWith('/trips') || p === '/' },
     { href: '/budget', label: t.budget, icon: PieChart, test: (p: string) => p === '/budget' },
     { href: '/toolbox', label: t.packingList, icon: ShoppingBag, test: (p: string) => p === '/toolbox' },
+    { href: '/shopping', label: t.shoppingList, icon: ListChecks, test: (p: string) => p === '/shopping' },
   ];
 
   return (

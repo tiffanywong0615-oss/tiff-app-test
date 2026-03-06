@@ -43,8 +43,15 @@
 }
 
 .activity-time {
-  font-size: 12px;
-  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FF6FAE;
+  background: #FFF0F6;
+  padding: 3px 8px;
+  border-radius: 999px;
 }
 
 .activity-location {
@@ -65,6 +72,42 @@
   font-size: 12px;
   color: #9CA3AF;
   margin-bottom: 8px;
+}
+
+.activity-map-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.activity-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  background: #EFF6FF;
+  color: #3B82F6;
+  border: 1px solid #BFDBFE;
+  transition: background 0.2s;
+}
+
+.activity-map-btn:hover {
+  background: #DBEAFE;
+}
+
+.activity-map-btn--parking {
+  background: #F0FDF4;
+  color: #22C55E;
+  border-color: #BBF7D0;
+}
+
+.activity-map-btn--parking:hover {
+  background: #DCFCE7;
 }
 
 .activity-footer {

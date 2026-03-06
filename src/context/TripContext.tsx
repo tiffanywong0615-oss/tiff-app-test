@@ -2,14 +2,14 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Trip, Activity, DayItinerary } from '@/types';
+import { Trip, Activity, DayItinerary, ShoppingItem } from '@/types';
 import { getSeedData } from '@/lib/seedData';
 
 interface TripContextType {
   trips: Trip[];
   selectedTripId: string | null;
   selectedTrip: Trip | null;
-  createTrip: (trip: Omit<Trip, 'id' | 'dailyItinerary' | 'budget' | 'checklist' | 'status'>) => void;
+  createTrip: (trip: Omit<Trip, 'id' | 'dailyItinerary' | 'budget' | 'checklist' | 'status' | 'shoppingList'>) => void;
   updateTrip: (id: string, updates: Partial<Trip>) => void;
   deleteTrip: (id: string) => void;
   selectTrip: (id: string | null) => void;
@@ -19,6 +19,9 @@ interface TripContextType {
   reorderActivities: (tripId: string, dayIndex: number, activities: Activity[]) => void;
   toggleChecklistItem: (tripId: string, itemId: string) => void;
   addChecklistItem: (tripId: string, item: string) => void;
+  addShoppingItem: (tripId: string, item: Omit<ShoppingItem, 'id'>) => void;
+  toggleShoppingItem: (tripId: string, itemId: string) => void;
+  deleteShoppingItem: (tripId: string, itemId: string) => void;
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -32,7 +35,11 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem('japan-travel-app');
       if (stored) {
         const parsed = JSON.parse(stored);
-        setTrips(parsed.trips || []);
+        const tripsWithDefaults = (parsed.trips || []).map((t: Trip) => ({
+          ...t,
+          shoppingList: t.shoppingList ?? [],
+        }));
+        setTrips(tripsWithDefaults);
       } else {
         const seed = getSeedData();
         setTrips(seed);
@@ -52,7 +59,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
 
   const selectedTrip = trips.find(t => t.id === selectedTripId) || null;
 
-  const createTrip = useCallback((tripData: Omit<Trip, 'id' | 'dailyItinerary' | 'budget' | 'checklist' | 'status'>) => {
+  const createTrip = useCallback((tripData: Omit<Trip, 'id' | 'dailyItinerary' | 'budget' | 'checklist' | 'status' | 'shoppingList'>) => {
     const start = new Date(tripData.startDate);
     const end = new Date(tripData.endDate);
     const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -82,6 +89,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         { id: uuidv4(), item: '機票確認', completed: false },
         { id: uuidv4(), item: '飯店預訂確認', completed: false },
       ],
+      shoppingList: [],
     };
     setTrips(prev => [...prev, newTrip]);
   }, []);
@@ -164,10 +172,43 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const addShoppingItem = useCallback((tripId: string, item: Omit<ShoppingItem, 'id'>) => {
+    setTrips(prev => prev.map(t => {
+      if (t.id !== tripId) return t;
+      return {
+        ...t,
+        shoppingList: [...(t.shoppingList ?? []), { ...item, id: uuidv4() }],
+      };
+    }));
+  }, []);
+
+  const toggleShoppingItem = useCallback((tripId: string, itemId: string) => {
+    setTrips(prev => prev.map(t => {
+      if (t.id !== tripId) return t;
+      return {
+        ...t,
+        shoppingList: (t.shoppingList ?? []).map(item =>
+          item.id === itemId ? { ...item, bought: !item.bought } : item
+        ),
+      };
+    }));
+  }, []);
+
+  const deleteShoppingItem = useCallback((tripId: string, itemId: string) => {
+    setTrips(prev => prev.map(t => {
+      if (t.id !== tripId) return t;
+      return {
+        ...t,
+        shoppingList: (t.shoppingList ?? []).filter(item => item.id !== itemId),
+      };
+    }));
+  }, []);
+
   return (
     <TripContext.Provider value={{
       trips, selectedTripId, selectedTrip, createTrip, updateTrip, deleteTrip, selectTrip,
       addActivity, updateActivity, deleteActivity, reorderActivities, toggleChecklistItem, addChecklistItem,
+      addShoppingItem, toggleShoppingItem, deleteShoppingItem,
     }}>
       {children}
     </TripContext.Provider>
