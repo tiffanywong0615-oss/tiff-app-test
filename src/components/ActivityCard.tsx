@@ -1,72 +1,79 @@
-import React from 'react';
+'use client';
+
+import { useState } from 'react';
 import './ActivityCard.css';
 import { Activity } from '@/types';
+import { useTripContext } from '@/context/TripContext';
+import EditActivityModal from './EditActivityModal';
+import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil } from 'lucide-react';
 
 interface ActivityCardProps {
     activity: Activity;
-    tripId?: string;    // reserved for future use (e.g. edit/delete actions)
-    dayIndex?: number;  // reserved for future use (e.g. edit/delete actions)
+    tripId: string;
+    dayIndex: number;
 }
 
-const ActivityCard = ({ activity }: ActivityCardProps) => {
-    const { type, location, mapQuery } = activity;
-    const [photoUrl, setPhotoUrl] = React.useState('');
+const typeConfig: Record<Activity['type'], { color: string; label: string; Icon: React.ElementType }> = {
+    Food:        { color: '#F97316', label: '餐飲',   Icon: UtensilsCrossed },
+    Sightseeing: { color: '#3B82F6', label: '觀光',   Icon: Camera },
+    Transport:   { color: '#22C55E', label: '交通',   Icon: Train },
+    Hotel:       { color: '#A855F7', label: '飯店',   Icon: Building },
+    Shopping:    { color: '#EC4899', label: '購物',   Icon: ShoppingBag },
+    Other:       { color: '#94A3B8', label: '其他',   Icon: MoreHorizontal },
+};
 
-    const fetchPhoto = React.useCallback(async () => {
-        const picsumUrl = `https://picsum.photos/seed/${encodeURIComponent(type + location)}/400/300`;
-        let resolvedUrl = '';
+const ActivityCard = ({ activity, tripId, dayIndex }: ActivityCardProps) => {
+    const { updateActivity } = useTripContext();
+    const [isEditing, setIsEditing] = useState(false);
 
-        try {
-            if (mapQuery) {
-                const wikiSummaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(mapQuery)}`;
-                const response = await fetch(wikiSummaryUrl);
-                const data = await response.json();
-
-                if (data.thumbnail) {
-                    resolvedUrl = data.thumbnail.source;
-                } else {
-                    const wikiSearchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(mapQuery)}&origin=*`;
-                    const searchResponse = await fetch(wikiSearchUrl);
-                    const searchData = await searchResponse.json();
-                    if (searchData.query?.search?.length > 0) {
-                        const title = searchData.query.search[0].title;
-                        const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&format=json&srsearch=${encodeURIComponent(title)}&origin=*`;
-                        const commonsResponse = await fetch(commonsUrl);
-                        const commonsData = await commonsResponse.json();
-                        if (commonsData.query?.search?.length > 0) {
-                            const fileTitle = commonsData.query.search[0].title;
-                            resolvedUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileTitle)}?width=400`;
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Photo fetch failed:', error);
-            resolvedUrl = '';
-        }
-
-        // Fallback to picsum.photos if no photo was resolved
-        if (!resolvedUrl) {
-            resolvedUrl = picsumUrl;
-        }
-
-        setPhotoUrl(resolvedUrl);
-    }, [type, location, mapQuery]);
-
-    React.useEffect(() => {
-        fetchPhoto();
-    }, [fetchPhoto]);
+    const { color, label, Icon } = typeConfig[activity.type] ?? typeConfig.Other;
 
     return (
-        <div className="activity-card">
-            <div className="photo-section">
-                {photoUrl ? <img src={photoUrl} alt={type} /> : <div className="skeleton-placeholder">Loading...</div>}
+        <>
+            <div className="activity-card">
+                <div className="activity-accent-bar" style={{ backgroundColor: color }} />
+                <div className="activity-body">
+                    <div className="activity-type-row">
+                        <span className="activity-type-badge">
+                            <Icon size={12} />
+                            {label}
+                        </span>
+                        <span className="activity-time">{activity.time}</span>
+                    </div>
+
+                    <p className="activity-location">{activity.location}</p>
+
+                    {activity.notes && (
+                        <p className="activity-highlights">✨ 亮點：{activity.notes}</p>
+                    )}
+                    {activity.mapQuery && (
+                        <p className="activity-map-query">📍 {activity.mapQuery}</p>
+                    )}
+
+                    <div className="activity-footer">
+                        <span className="activity-cost">💴 ¥{activity.cost.toLocaleString()}</span>
+                        <button
+                            className="activity-edit-btn"
+                            onClick={() => setIsEditing(true)}
+                            aria-label="編輯活動"
+                        >
+                            <Pencil size={15} />
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div className="activity-details">
-                <h2>{type}</h2>
-                <p>{location}</p>
-            </div>
-        </div>
+
+            {isEditing && (
+                <EditActivityModal
+                    activity={activity}
+                    onClose={() => setIsEditing(false)}
+                    onSave={(updates) => {
+                        updateActivity(tripId, dayIndex, activity.id, updates);
+                        setIsEditing(false);
+                    }}
+                />
+            )}
+        </>
     );
 };
 
