@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Sun, Cloud, CloudRain, Snowflake, CloudSun, Plane, Calendar } from 'lucide-react';
 import { useTripContext } from '@/context/TripContext';
@@ -37,11 +37,40 @@ export default function TripDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { trips } = useTripContext();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedDay, setSelectedDay] = useState(1);
   const [countdown, setCountdown] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+  const [translatedTitle, setTranslatedTitle] = useState('');
+  const titleTranslationCache = useRef<Record<string, string>>({});
 
   const trip = trips.find(tr => tr.id === params.id);
+
+  useEffect(() => {
+    if (!trip) return;
+    if (language === 'zh') {
+      setTranslatedTitle(trip.title);
+      return;
+    }
+    const cacheKey = `${trip.id}_title_${language}`;
+    if (titleTranslationCache.current[cacheKey]) {
+      setTranslatedTitle(titleTranslationCache.current[cacheKey]);
+      return;
+    }
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(trip.title)}&langpair=zh|en`)
+      .then(res => {
+        if (!res.ok) throw new Error('Translation request failed');
+        return res.json();
+      })
+      .then((data: { responseData: { translatedText: string }; responseStatus: number }) => {
+        if (data.responseStatus === 200) {
+          titleTranslationCache.current[cacheKey] = data.responseData.translatedText;
+          setTranslatedTitle(data.responseData.translatedText);
+        } else {
+          setTranslatedTitle(trip.title);
+        }
+      })
+      .catch(() => setTranslatedTitle(trip.title));
+  }, [language, trip]);
 
   useEffect(() => {
     if (!trip) return;
@@ -99,7 +128,7 @@ export default function TripDetailPage() {
               {trip.startDate} — {trip.endDate} · {daysCount}{t.daysTrip}
             </span>
           </div>
-          <h1 className="text-xl font-bold text-white mb-3">{trip.title}</h1>
+          <h1 className="text-xl font-bold text-white mb-3">{translatedTitle || trip.title}</h1>
           {countdown ? (
             <div>
               <div className="flex items-center gap-1.5 mb-2">
@@ -170,6 +199,8 @@ export default function TripDetailPage() {
               <ActivityCard
                 key={activity.id}
                 activity={activity}
+                tripId={trip.id}
+                dayIndex={dayIndex}
               />
             ))}
           </div>

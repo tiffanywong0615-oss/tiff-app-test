@@ -47,6 +47,11 @@ export interface Translations {
   };
   weekdays: string[];
   loading: string;
+  translating: string;
+  editCost: string;
+  saveCost: string;
+  cancelEdit: string;
+  nearestParking: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -97,6 +102,11 @@ export const translations: Record<Language, Translations> = {
     },
     weekdays: ['日', '一', '二', '三', '四', '五', '六'],
     loading: '載入中...',
+    translating: '翻譯中...',
+    editCost: '編輯費用',
+    saveCost: '確認',
+    cancelEdit: '取消',
+    nearestParking: '附近停車場',
   },
   en: {
     itinerary: 'Itinerary',
@@ -145,5 +155,10 @@ export const translations: Record<Language, Translations> = {
     },
     weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     loading: 'Loading...',
+    translating: 'Translating...',
+    editCost: 'Edit Cost',
+    saveCost: 'Save',
+    cancelEdit: 'Cancel',
+    nearestParking: 'Nearest Parking',
   },
 };
