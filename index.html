@@ -1,1238 +1,1257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>2026 九州六日自駕美食之旅</title>
+  <title>九州自駕美食之旅｜一頁式 Web App</title>
 
-  <!-- ✅ FIX: Proper Google Fonts links (NOT raw URLs) -->
+  <!-- Zen Maru Gothic -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg: #FFF8FB;
-      --card: #FFFFFF;
-      --text: #111827;
-      --muted: #6B7280;
-      --line: rgba(17, 24, 39, .08);
-
-      /* floral pastel */
-      --pink: #FF6FAE;
-      --pink-soft: #FFE1EE;
-      --yellow: #FFE08A;
-      --yellow-soft: #FFF4C7;
-
-      /* accents */
-      --blue: #3B82F6;
-      --green: #22C55E;
-
-      --shadow: 0 12px 35px rgba(17, 24, 39, .10);
-      --shadow2: 0 4px 14px rgba(17, 24, 39, .08);
-
-      --r16: 16px;
-      --r20: 20px;
-      --pill: 999px;
-
-      --safe-top: env(safe-area-inset-top);
-      --safe-bottom: env(safe-area-inset-bottom);
-      --nav-h: 74px;
+      --pink:#FFD6E7; --pink2:#FFBBD7;
+      --yellow:#FFF1B8; --yellow2:#FFE38D;
+      --ink:#2B2A33; --muted:#6A6778;
+      --card:rgba(255,255,255,.78);
+      --line:rgba(240, 220, 235, .9);
+      --shadow: 0 12px 30px rgba(30,18,40,.10);
+      --shadow2: 0 10px 22px rgba(30,18,40,.08);
+      --r:22px; --r2:28px;
+      --safeB: env(safe-area-inset-bottom);
+      --safeT: env(safe-area-inset-top);
+      --tap: cubic-bezier(.2,.9,.1,1);
     }
-
-    *{ box-sizing:border-box; }
-    html, body { height: 100%; }
-
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: "Inter","Noto Sans TC","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(900px 520px at 18% -10%, rgba(255,111,174,.35), transparent 60%),
-        radial-gradient(820px 520px at 88% -5%, rgba(255,224,138,.45), transparent 55%),
-        linear-gradient(180deg, rgba(255,248,251,1) 0%, rgba(255,255,255,1) 40%, rgba(255,250,240,1) 100%);
-    }
+      font-family:"Zen Maru Gothic", system-ui, -apple-system, "Noto Sans TC", Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      overflow-x:hidden;
 
-    /* Floral pattern overlay (no external images) */
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      pointer-events:none;
-      opacity: .18;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='none'%3E%3Ccircle cx='90' cy='90' r='52' fill='%23FFB6D6' fill-opacity='0.25'/%3E%3Ccircle cx='310' cy='120' r='44' fill='%23FFE8A8' fill-opacity='0.35'/%3E%3Ccircle cx='250' cy='300' r='48' fill='%23FFB6D6' fill-opacity='0.22'/%3E%3Cpath d='M330 310c6-14 20-18 30-8 4 4 6 10 5 15 12-1 22 8 20 18-2 11-13 18-25 16-4 11-18 17-29 11-12-7-13-20-1-27-9-5-12-15 0-25z' fill='%23FFD6E6' fill-opacity='0.35'/%3E%3C/g%3E%3C/svg%3E");
-      background-size: 360px 360px;
-      filter: saturate(1.05);
+      /* kawaii japanese background */
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255,214,231,.85) 0 18%, transparent 19%),
+        radial-gradient(circle at 82% 16%, rgba(255,241,184,.85) 0 16%, transparent 17%),
+        radial-gradient(circle at 18% 78%, rgba(255,241,184,.55) 0 14%, transparent 15%),
+        radial-gradient(circle at 78% 82%, rgba(255,214,231,.45) 0 15%, transparent 16%),
+        linear-gradient(180deg, #FFF8FB 0%, #FFFDF4 60%, #FFFFFF 100%);
+      background-attachment: fixed;
     }
 
     .app{
-      min-height: 100%;
-      display:flex;
-      flex-direction:column;
-      position: relative;
-      z-index: 1;
+      max-width:430px;
+      margin:0 auto;
+      min-height:100vh;
+      padding-bottom: calc(92px + var(--safeB));
     }
 
-    .container{
-      max-width: 980px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 16px;
-      padding-top: calc(10px + var(--safe-top));
-      padding-bottom: calc(var(--nav-h) + 18px + var(--safe-bottom));
+    /* Header */
+    .header{
+      position:sticky; top:0; z-index:20;
+      padding: calc(14px + var(--safeT)) 16px 12px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.62));
+      border-bottom:1px solid rgba(240,220,235,.8);
+      transition: box-shadow .25s var(--tap);
+    }
+    .header.is-scrolled{ box-shadow:0 10px 20px rgba(20,10,30,.08); }
+    .headerTop{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    }
+    h1{ margin:0; font-size:18px; line-height:1.25; letter-spacing:.2px; }
+    .sub{
+      margin-top:6px;
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      color:var(--muted); font-size:12.5px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:999px;
+      background: linear-gradient(180deg, rgba(255,214,231,.78), rgba(255,241,184,.58));
+      border:1px solid rgba(255, 180, 210, .35);
+      box-shadow: 0 10px 18px rgba(255,187,215,.12);
+      color:#473A4B;
+      font-size:12px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: linear-gradient(180deg, var(--pink2), var(--yellow2));
+      box-shadow:0 0 0 2px rgba(255,255,255,.6);
     }
 
-    /* Hero */
-    .hero{
-      position: relative;
-      border-radius: var(--r20);
-      background:
-        linear-gradient(135deg, rgba(255,111,174,.20), rgba(255,224,138,.22)),
-        rgba(255,255,255,.92);
-      border: 1px solid rgba(255,111,174,.18);
-      box-shadow: var(--shadow2);
-      padding: 16px 16px 14px;
-      overflow:hidden;
+    /* Top tabs */
+    .tabs{ display:flex; gap:8px; padding-top:12px; }
+    .tab{
+      flex:1;
+      border:none;
+      background: rgba(255,255,255,.64);
+      border:1px solid rgba(240,220,235,.86);
+      border-radius:999px;
+      padding:10px 10px;
+      font-size:13px;
+      color:#4A4458;
+      box-shadow: 0 10px 22px rgba(30,18,40,.06);
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .12s var(--tap), background .2s var(--tap), border-color .2s var(--tap);
     }
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:-40px -60px auto auto;
-      width: 220px; height: 220px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,111,174,.40), transparent 62%);
-      transform: rotate(12deg);
-      filter: blur(1px);
-    }
-    .hero::after{
-      content:"";
-      position:absolute;
-      inset:auto auto -70px -70px;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle at 60% 40%, rgba(255,224,138,.55), transparent 62%);
-      transform: rotate(-10deg);
-      filter: blur(1px);
-    }
-    .hero-top{
-      position: relative;
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-    .title{
-      margin:0;
-      font-size: 1.2rem;
-      font-weight: 900;
-      letter-spacing: .2px;
-    }
-    .subtitle{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: .92rem;
-      line-height: 1.35;
-    }
-    .badge{
-      position: relative;
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: var(--pill);
-      background: rgba(255,111,174,.13);
-      border: 1px solid rgba(255,111,174,.22);
-      color: #B4235A;
-      font-weight: 900;
-      white-space:nowrap;
-      flex-shrink:0;
+    .tab:active{ transform:scale(.98) }
+    .tab[aria-selected="true"]{
+      background: linear-gradient(180deg, rgba(255,214,231,.94), rgba(255,241,184,.82));
+      border-color: rgba(255, 180, 210, .45);
+      color:#2E2333;
+      font-weight:700;
     }
 
-    /* Cards */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
+    /* Sections */
+    .section{ padding: 14px 16px 0; display:none; animation: fadeUp .22s var(--tap) both; }
+    .section.is-active{ display:block; }
+    @keyframes fadeUp{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+
+    .tagline{ margin:0 0 12px; color:var(--muted); font-size:12.8px; line-height:1.5; }
+
+    /* Generic cards */
     .card{
-      background: rgba(255,255,255,.94);
-      border: 1px solid var(--line);
-      border-radius: var(--r20);
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--r2);
       box-shadow: var(--shadow2);
       padding: 14px;
-      backdrop-filter: blur(6px);
+      margin-bottom: 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:170px;height:170px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.78) 0 28%, rgba(255,255,255,0) 60%),
+        radial-gradient(circle at 70% 70%, rgba(255,214,231,.45) 0 30%, rgba(255,214,231,0) 60%),
+        radial-gradient(circle at 40% 80%, rgba(255,241,184,.35) 0 28%, rgba(255,241,184,0) 62%);
+      transform: rotate(10deg);
+      pointer-events:none;
     }
 
-    /* stats */
-    .stats{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .stat{
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      padding: 12px;
-      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.86));
-    }
-    .k{ font-size: .82rem; color: var(--muted); }
-    .v{ margin-top: 6px; font-weight: 900; font-size: 1.05rem; }
-
-    /* views */
-    .view{ display:none; }
-    .view.active{ display:block; }
-
-    /* controls */
-    .controls{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .search{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      padding: 12px 12px;
-      background:#fff;
-    }
-    .search input{
-      border:0;
-      outline:none;
-      width: 100%;
-      font-size: .98rem;
-      background: transparent;
-    }
-    .chips{
-      display:flex;
-      gap: 8px;
-      overflow:auto;
-      padding-bottom: 2px;
-      -webkit-overflow-scrolling: touch;
+    .cardHead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+    .cardTitle{ min-width:0; }
+    .cardTitle h2{ margin:0; font-size:15.5px; line-height:1.3; }
+    .meta{
+      margin-top:6px;
+      display:flex; gap:8px; flex-wrap:wrap;
+      color:var(--muted); font-size:12.5px;
     }
     .chip{
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--text);
-      border-radius: var(--pill);
-      padding: 10px 12px;
-      font-weight: 900;
-      font-size: .9rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: .12s ease;
-    }
-    .chip:hover{ border-color: rgba(255,111,174,.35); }
-    .chip.active{
-      background: rgba(255,111,174,.12);
-      border-color: rgba(255,111,174,.24);
-      color: #B4235A;
-    }
-    .chip.alt.active{
-      background: rgba(34,197,94,.12);
-      border-color: rgba(34,197,94,.22);
-      color: #0E7A3B;
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(240,220,235,.86);
+      color:#3E354A;
+      font-size:12px;
     }
 
-    /* Home: day strip */
-    .daystrip{
-      margin-top: 10px;
-      display:flex;
-      gap: 8px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
-    }
-    .daybtn{
-      border: 1px solid var(--line);
-      background:#fff;
+    .btn{
+      border:none;
       border-radius: 14px;
       padding: 10px 12px;
-      min-width: 72px;
-      font-weight: 1000;
+      background: linear-gradient(180deg, rgba(255,214,231,.95), rgba(255,241,184,.92));
+      border: 1px solid rgba(255, 180, 210, .45);
+      box-shadow: 0 12px 26px rgba(255,187,215,.18);
+      color:#2C2030;
+      font-weight:700;
+      font-size:12.5px;
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .12s var(--tap), filter .2s var(--tap);
       white-space:nowrap;
-      transition:.12s ease;
     }
-    .daybtn.active{
-      background: rgba(255,111,174,.12);
-      border-color: rgba(255,111,174,.24);
-      color: #B4235A;
+    .btn:active{ transform: scale(.98); filter: brightness(.98); }
+
+    .btnGhost{
+      border:1px solid rgba(240,220,235,.9);
+      background: rgba(255,255,255,.78);
+      box-shadow:none;
+      font-weight:600;
     }
 
-    /* Itinerary tabbar */
-    .tabbar{
-      margin-top: 12px;
-      background: rgba(255,255,255,.94);
-      border: 1px solid var(--line);
-      border-radius: var(--r20);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      backdrop-filter: blur(8px);
+    /* List items */
+    .list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .li{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 10px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.76);
+      border: 1px solid rgba(240, 220, 235, .76);
     }
-    .tablist{
-      position: sticky;
-      top: 8px;
-      z-index: 5;
+    .icon{
+      width:28px;height:28px;border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,214,231,.95), rgba(255,241,184,.90));
+      border:1px solid rgba(255, 180, 210, .35);
+      display:grid; place-items:center;
+      flex:0 0 auto;
+      box-shadow: 0 10px 18px rgba(255,187,215,.10);
+      font-size:15px;
+    }
+    .txt{ min-width:0; }
+    .txt b{ display:block; font-size:13.5px; margin-bottom:2px; line-height:1.25; }
+    .txt span{ display:block; font-size:12.5px; color:var(--muted); line-height:1.35; }
+
+    /* iOS-like Day horizontal carousel */
+    .carouselWrap{
+      margin: 4px -16px 0; /* full-bleed */
+      padding: 2px 16px 10px;
+    }
+    .carousel{
       display:flex;
-      gap: 8px;
-      padding: 12px;
-      overflow:auto;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(12px);
+      gap:12px;
+      overflow-x:auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
     }
-    .tab{
-      appearance:none;
-      border: 1px solid var(--line);
-      background: #fff;
-      padding: 10px 14px;
-      border-radius: var(--pill);
-      font-weight: 1000;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: .12s ease;
-    }
-    .tab[aria-selected="true"]{
-      background: rgba(255,224,138,.28);
-      border-color: rgba(255,224,138,.40);
-      color: #8A5A00;
-    }
-
-    /* panels */
-    .panel{ display:none; padding: 14px; }
-    .panel.active{ display:block; }
-
-    .day-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap: 10px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .day-title{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      flex-wrap:wrap;
-      font-weight: 1000;
-      font-size: 1.05rem;
-    }
-    .day-budget{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: var(--pill);
-      border: 1px solid rgba(34,197,94,.22);
-      background: rgba(34,197,94,.10);
-      color: #0E7A3B;
-      font-weight: 1000;
-      font-size: .9rem;
-      white-space: nowrap;
-    }
-    .weather{
-      color: #E11D48;
-      font-weight: 900;
-      font-size: .9rem;
-      white-space: nowrap;
-    }
-    .day-note{
-      color: var(--muted);
-      font-size: .9rem;
-      margin-top: 6px;
-      font-weight: 600;
-    }
-
-    /* activity list */
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .item{
-      background:#fff;
-      border: 1px solid var(--line);
-      border-radius: var(--r20);
-      box-shadow: var(--shadow2);
-      padding: 12px;
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
-    }
-    .left{
-      width: 76px;
-      flex: 0 0 76px;
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      align-items:flex-start;
-    }
-    .time{
-      font-weight: 1000;
-      font-variant-numeric: tabular-nums;
-      background: rgba(17,24,39,.04);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 6px 8px;
-      font-size: .88rem;
-    }
-    .type{
-      display:inline-flex;
-      align-items:center;
-      gap: 6px;
-      padding: 6px 8px;
-      border-radius: var(--pill);
-      border: 1px solid rgba(255,111,174,.22);
-      background: rgba(255,111,174,.10);
-      color: #B4235A;
-      font-weight: 1000;
-      font-size: .82rem;
-      white-space:nowrap;
-    }
-    .body{
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .mainline{
-      font-weight: 800;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-    .meta{
-      margin-top: 10px;
-      display:flex;
-      gap: 8px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .cost{
-      margin-left:auto;
-      font-weight: 1000;
-      color: #0E7A3B;
-      background: rgba(34,197,94,.10);
-      border: 1px solid rgba(34,197,94,.20);
-      border-radius: var(--pill);
-      padding: 6px 10px;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-    .map{
-      display:inline-flex;
-      align-items:center;
-      gap: 6px;
-      padding: 8px 10px;
-      border-radius: var(--pill);
-      border: 1px solid rgba(59,130,246,.24);
-      background: rgba(59,130,246,.12);
-      color: #0B5EA8;
-      font-weight: 1000;
-      text-decoration:none;
-      font-size: .88rem;
-      white-space: nowrap;
-    }
-    .empty{
-      display:none;
-      margin-top: 12px;
-      border: 1px dashed rgba(17,24,39,.25);
-      background: rgba(255,255,255,.72);
-      border-radius: var(--r20);
+    .carousel::-webkit-scrollbar{ display:none; }
+    .dayCard{
+      flex: 0 0 88%;
+      scroll-snap-align: center;
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
       padding: 14px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    /* Budget view */
-    .section-title{
-      font-weight: 1000;
-      margin: 0 0 10px;
-      font-size: 1.02rem;
-    }
-    .rows{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-    }
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      background: #fff;
-      box-shadow: var(--shadow2);
-      cursor: pointer;
-    }
-    .row .label{ font-weight: 900; }
-    .row .sub{ color: var(--muted); font-size: .86rem; margin-top: 2px; }
-    .row .right{ font-weight: 1000; color:#0E7A3B; font-variant-numeric: tabular-nums; white-space:nowrap; }
-
-    .barlist{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .baritem{
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      background:#fff;
-      padding: 12px;
-      box-shadow: var(--shadow2);
-    }
-    .barhead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .barname{ font-weight: 1000; }
-    .barvalue{ font-weight: 1000; color:#0E7A3B; font-variant-numeric: tabular-nums; }
-    .track{
-      height: 10px;
-      border-radius: var(--pill);
-      background: rgba(17,24,39,.06);
+      position:relative;
       overflow:hidden;
     }
-    .fill{
-      height: 100%;
-      width: 0%;
-      border-radius: var(--pill);
-      background: linear-gradient(90deg, rgba(255,111,174,.65), rgba(255,224,138,.85));
-    }
+    .dayCard:active{ transform: translateY(1px); }
+    .dayTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
+    .dayTitle{ min-width:0; }
+    .dayTitle h3{ margin:0; font-size:16px; line-height:1.25; }
+    .dayTitle .small{ margin-top:6px; color:var(--muted); font-size:12.5px; display:flex; gap:8px; flex-wrap:wrap; }
 
-    /* To-buy view */
-    .todo-input{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      margin-top: 10px;
-    }
-    .todo-input input{
-      flex: 1 1 auto;
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      padding: 12px 12px;
-      font-size: .98rem;
-      background:#fff;
-      outline:none;
-    }
-    .btn{
-      border: 1px solid rgba(255,111,174,.25);
-      background: rgba(255,111,174,.12);
-      color: #B4235A;
-      border-radius: var(--r16);
-      padding: 12px 14px;
-      font-weight: 1000;
+    .rowBtns{ display:flex; gap:8px; flex-wrap:wrap; }
+    .mapBtn{
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 9px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(240,220,235,.9);
+      background: rgba(255,255,255,.78);
       cursor:pointer;
+      font-size:12.5px;
+      font-weight:700;
+      color:#2C2030;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .12s var(--tap);
       white-space:nowrap;
     }
-    .btn:active{ transform: translateY(1px); }
+    .mapBtn:active{ transform:scale(.98) }
 
-    .todo-list{
-      margin-top: 12px;
+    /* Bottom nav */
+    .bottomNav{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom: calc(12px + var(--safeB));
+      width: min(430px, calc(100vw - 24px));
+      z-index:30;
+      padding:10px;
+      border-radius: 26px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(240,220,235,.86);
+      box-shadow: 0 22px 60px rgba(20,10,30,.14);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .navRow{ display:flex; justify-content:space-between; gap:10px; }
+    .navBtn{
+      flex:1;
+      border:none;
+      background: transparent;
+      border-radius: 18px;
+      padding: 10px 10px;
       display:flex;
-      flex-direction:column;
-      gap: 8px;
-    }
-    .todo-item{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--r16);
-      background:#fff;
-      box-shadow: var(--shadow2);
-    }
-    .todo-item input[type="checkbox"]{
-      width: 18px; height: 18px;
-      accent-color: var(--pink);
-    }
-    .todo-text{
-      flex: 1 1 auto;
-      font-weight: 800;
-      word-break: break-word;
-    }
-    .todo-text.done{
-      color: var(--muted);
-      text-decoration: line-through;
-      font-weight: 700;
-    }
-    .iconbtn{
-      border: 1px solid var(--line);
-      background:#fff;
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 900;
-    }
-
-    /* Bottom navigation */
-    .bottom-nav{
-      position: fixed;
-      left: 0; right: 0;
-      bottom: 0;
-      height: calc(var(--nav-h) + var(--safe-bottom));
-      padding: 10px 12px calc(10px + var(--safe-bottom));
-      background: rgba(255,255,255,.90);
-      border-top: 1px solid var(--line);
-      backdrop-filter: blur(14px);
-      z-index: 60;
-    }
-    .navwrap{
-      max-width: 980px;
-      margin: 0 auto;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .navbtn{
-      display:flex;
-      flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap: 6px;
-      padding: 10px 8px;
-      border-radius: var(--r16);
-      border: 1px solid var(--line);
-      background:#fff;
+      gap:8px;
+      font-size:12.5px;
+      color:#51485C;
       cursor:pointer;
-      font-weight: 1000;
-      color: var(--text);
-      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .2s var(--tap), transform .12s var(--tap);
     }
-    .navbtn .ico{ font-size: 1.1rem; line-height: 1; }
-    .navbtn .txt{ font-size: .86rem; }
-    .navbtn.active{
-      background: rgba(255,111,174,.12);
-      border-color: rgba(255,111,174,.24);
-      color: #B4235A;
+    .navBtn:active{ transform:scale(.98) }
+    .navBtn.is-active{
+      background: linear-gradient(180deg, rgba(255,214,231,.95), rgba(255,241,184,.86));
+      border: 1px solid rgba(255, 180, 210, .45);
+      color:#2C2030;
+      font-weight:700;
     }
 
-    /* Responsive */
-    @media (min-width: 860px){
-      .grid{ grid-template-columns: 1.2fr .8fr; }
-      .left{ width: 86px; flex: 0 0 86px; }
+    /* Bottom sheet */
+    .backdrop{
+      position:fixed; inset:0;
+      background: rgba(18,10,26,.35);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .22s var(--tap);
+      z-index:40;
     }
-    @media (max-width: 520px){
-      .stats{ grid-template-columns: 1fr; }
-      .hero-top{ flex-direction:column; align-items:flex-start; }
-      .badge{ align-self:flex-start; }
-      .cost{ margin-left: 0; }
+    .backdrop.show{ opacity:1; pointer-events:auto; }
+    .sheet{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%) translateY(110%);
+      bottom:0;
+      width: min(430px, 100vw);
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(240,220,235,.9);
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -24px 70px rgba(20,10,30,.18);
+      z-index:50;
+      padding: 10px 16px calc(18px + var(--safeB));
+      transition: transform .28s var(--tap);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .sheet.show{ transform:translateX(-50%) translateY(0%); }
+    .grabber{ width:44px; height:5px; border-radius:999px; background: rgba(120,110,135,.25); margin: 8px auto 12px; }
+    .sheetHead{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
+    .sheetHead h4{ margin:0; font-size:15.5px; line-height:1.25; }
+    .close{
+      width:36px;height:36px;border-radius:16px;
+      border:1px solid rgba(255,180,210,.35);
+      background: rgba(255,214,231,.55);
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sheet p{ margin:0 0 10px; color:#4E465A; font-size:12.8px; line-height:1.5; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:10px; }
+    .mini{
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(240,220,235,.84);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .mini b{ display:block; margin-bottom:6px; font-size:13px; }
+    .mini ul{ margin:0; padding-left:18px; color:var(--muted); font-size:12.5px; }
+    .mini li{ margin:3px 0; }
+
+    /* Weather UI */
+    .field{ display:flex; gap:10px; align-items:center; margin-top:10px; }
+    .input{
+      flex:1;
+      border-radius: 18px;
+      padding: 12px 12px;
+      border:1px solid rgba(240,220,235,.9);
+      background: rgba(255,255,255,.76);
+      outline:none;
+      font-size: 13px;
+    }
+    .hint{ margin-top:8px; font-size:12px; color:var(--muted); line-height:1.35; }
+    .status{ margin-top:8px; font-size:12px; color:#6A5B75; }
+
+    /* To-buy (souvenir list) */
+    .toBuyHeader{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      margin-bottom:8px;
+    }
+    .toBuyForm{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .toBuyForm .full{ grid-column: 1 / -1; }
+    select.input{ appearance:none; -webkit-appearance:none; background-image: linear-gradient(45deg, transparent 50%, #A59AAF 50%), linear-gradient(135deg, #A59AAF 50%, transparent 50%); background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%; background-size: 6px 6px, 6px 6px; background-repeat:no-repeat; padding-right: 30px; }
+    .photoRow{ display:flex; gap:10px; align-items:center; }
+    .thumb{
+      width:52px; height:52px;
+      border-radius: 16px;
+      border:1px solid rgba(240,220,235,.9);
+      background: rgba(255,255,255,.72);
+      overflow:hidden;
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+      color:#9C92A8;
+      font-weight:700;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .toBuyItem{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(240,220,235,.80);
+    }
+    .toBuyItem .info{ flex:1; min-width:0; }
+    .toBuyItem .info .top{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .catTag{
+      font-size:11.5px; font-weight:700;
+      padding:5px 8px; border-radius:999px;
+      border:1px solid rgba(255,180,210,.35);
+      background: linear-gradient(180deg, rgba(255,214,231,.75), rgba(255,241,184,.55));
+      color:#3B2C3F;
+    }
+    .toBuyItem .info .name{ font-weight:800; font-size:13.5px; }
+    .toBuyItem .info .note{ margin-top:3px; font-size:12.3px; color:var(--muted); line-height:1.35; }
+    .miniBtns{ display:flex; gap:8px; }
+    .miniBtn{
+      border:none;
+      padding:8px 10px;
+      border-radius: 14px;
+      font-size:12px;
+      cursor:pointer;
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(240,220,235,.9);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .miniBtn:active{ transform:scale(.98); }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
     }
   </style>
 </head>
 
 <body>
-<div class="app">
-  <div class="container">
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-top">
+  <div class="app" id="app">
+    <!-- Header -->
+    <header class="header" id="header">
+      <div class="headerTop">
         <div>
-          <h1 class="title">2026 九州六日自駕美食之旅</h1>
-          <p class="subtitle">🌸💛 Mobile-first｜底部導覽：Home（行程）・Budget（預算）・To buy list（購物清單）</p>
+          <h1>九州自駕美食之旅 🚗🍜</h1>
+          <div class="sub">
+            <span id="dateRange">5/7 – 5/12</span>
+            <span class="pill"><span class="dot"></span>可愛風格 • Mobile-first</span>
+          </div>
         </div>
-        <div class="badge">💴 JPY｜自動加總</div>
       </div>
-    </section>
 
-    <!-- HOME VIEW -->
-    <section id="view-home" class="view active" aria-label="Home">
-      <section class="grid">
-        <div class="card">
-          <div class="stats">
-            <div class="stat">
-              <div class="k">總預算（全程）</div>
-              <div class="v" id="totalBudget">¥0</div>
-            </div>
-            <div class="stat">
-              <div class="k">目前篩選後合計（當天）</div>
-              <div class="v" id="filteredBudget">¥0</div>
-            </div>
-            <div class="stat">
-              <div class="k">目前顯示活動數（當天）</div>
-              <div class="v" id="filteredCount">0</div>
-            </div>
-          </div>
+      <div class="tabs" role="tablist" aria-label="主分頁">
+        <button class="tab" role="tab" aria-selected="true" aria-controls="panel-itin" id="tab-itin">🗺️ 行程</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-guide" id="tab-guide">📌 指南</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="panel-weather" id="tab-weather">☁️ 天氣</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- 行程 -->
+      <section class="section is-active" id="panel-itin" role="tabpanel" aria-labelledby="tab-itin">
+        <p class="tagline">
+          已按你 Excel 行程放入 Day1–Day6（餐廳 / 景點 / 住宿）。左右滑卡片就好似 iOS 行程咁～[1](https://cathaypacificairways-my.sharepoint.com/personal/tiffany_w_wong_cathaypacific_com/_layouts/15/Doc.aspx?sourcedoc=%7BB223AC61-D454-48AD-91CF-8A29F7788209%7D&file=%E4%B9%9D%E5%B7%9E%E5%85%AD%E6%97%A5%E8%87%AA%E9%A7%95%E8%A1%8C%E7%A8%8B%E8%A6%8F%E5%8A%83.xlsx&action=default&mobileredirect=true)
+        </p>
+
+        <!-- Horizontal carousel -->
+        <div class="carouselWrap">
+          <div class="carousel" id="dayCarousel" aria-label="Day 行程橫向滑動"></div>
         </div>
 
-        <div class="card">
-          <div class="controls">
-            <div class="search">
-              <span aria-hidden="true">🔍</span>
-              <input id="searchInput" type="search" placeholder="搜尋：咖啡 / 由布院 / outlet / 別府…" />
-            </div>
-
-            <div class="chips" aria-label="類型篩選">
-              <button class="chip active" data-filter="ALL">全部</button>
-              <button class="chip" data-filter="餐飲">🍜 餐飲</button>
-              <button class="chip" data-filter="景點">🏯 景點</button>
-              <button class="chip" data-filter="交通">🚗 交通</button>
-              <button class="chip" data-filter="住宿">🏨 住宿</button>
-              <button class="chip" data-filter="購物">🛍️ 購物</button>
-              <button class="chip alt" id="paidOnlyChip" aria-pressed="false">💰 只顯示有費用</button>
-              <button class="chip" id="resetBtn">↩︎ 重置</button>
+        <article class="card">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <h2>✨ 快速操作</h2>
+              <div class="meta">
+                <span class="chip">👉 左右滑 Day 卡</span>
+                <span class="chip">🗺️ 地圖一鍵開</span>
+                <span class="chip">📋 詳情用 Bottom Sheet</span>
+              </div>
             </div>
           </div>
 
-          <div class="daystrip" id="dayStrip" aria-label="快速切換日程"></div>
-        </div>
+          <ul class="list">
+            <li class="li">
+              <div class="icon">🗺️</div>
+              <div class="txt">
+                <b>點「地圖」就會開 Google Maps</b>
+                <span>可用「店名/景點名」搜尋或直接導航</span>
+              </div>
+            </li>
+            <li class="li">
+              <div class="icon">📌</div>
+              <div class="txt">
+                <b>點「查看詳情」會彈出行程重點</b>
+                <span>更似原生 App 嘅 bottom sheet 手感</span>
+              </div>
+            </li>
+          </ul>
+        </article>
       </section>
 
-      <section class="tabbar" aria-label="行程日程">
-        <div class="tablist" role="tablist" id="tablist"></div>
-        <div id="panels"></div>
-      </section>
-    </section>
+      <!-- 指南 -->
+      <section class="section" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide">
+        <p class="tagline">
+          自駕＋美食最緊要「唔中伏 + 唔漏買」。呢頁包含：自駕提醒 + 手信 To‑buy 清單（可上傳相、可分類、可編輯，資料只會存在你部機瀏覽器）。[1](https://cathaypacificairways-my.sharepoint.com/personal/tiffany_w_wong_cathaypacific_com/_layouts/15/Doc.aspx?sourcedoc=%7BB223AC61-D454-48AD-91CF-8A29F7788209%7D&file=%E4%B9%9D%E5%B7%9E%E5%85%AD%E6%97%A5%E8%87%AA%E9%A7%95%E8%A1%8C%E7%A8%8B%E8%A6%8F%E5%8A%83.xlsx&action=default&mobileredirect=true)
+        </p>
 
-    <!-- BUDGET VIEW -->
-    <section id="view-budget" class="view" aria-label="Budget">
-      <section class="grid">
-        <div class="card">
-          <h2 class="section-title">預算總覽</h2>
-          <div class="stats">
-            <div class="stat">
-              <div class="k">總預算（全程）</div>
-              <div class="v" id="budgetTotal">¥0</div>
-            </div>
-            <div class="stat">
-              <div class="k">平均每日花費</div>
-              <div class="v" id="budgetAvg">¥0</div>
-            </div>
-            <div class="stat">
-              <div class="k">最高花費日</div>
-              <div class="v" id="budgetMaxDay">—</div>
+        <article class="card">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <h2>🚗 自駕提醒（精簡版）</h2>
+              <div class="meta">
+                <span class="chip">ETC</span>
+                <span class="chip">停車</span>
+                <span class="chip">油站</span>
+              </div>
             </div>
           </div>
-          <div class="k" style="margin-top:10px;">提示：以下 breakdown 會按行程 cost 自動計算。</div>
-        </div>
+          <ul class="list">
+            <li class="li"><div class="icon">🛣️</div><div class="txt"><b>高速建議租 ETC</b><span>落閘快好多，趕行程超有用</span></div></li>
+            <li class="li"><div class="icon">🅿️</div><div class="txt"><b>景點近多數係 coin parking</b><span>短泊計時，先睇收費牌／上限價</span></div></li>
+            <li class="li"><div class="icon">⛽</div><div class="txt"><b>還車前預鬆時間入油</b><span>尤其福岡還車日，唔好臨尾先搵油站</span></div></li>
+          </ul>
+        </article>
 
-        <div class="card">
-          <h2 class="section-title">每日預算 Breakdown</h2>
-          <div class="rows" id="budgetByDay"></div>
-        </div>
-      </section>
-
-      <section class="grid">
-        <div class="card">
-          <h2 class="section-title">按類型分佈（全程）</h2>
-          <div class="barlist" id="budgetByType"></div>
-        </div>
-      </section>
-    </section>
-
-    <!-- TO BUY VIEW -->
-    <section id="view-tobuy" class="view" aria-label="To buy list">
-      <section class="grid">
-        <div class="card">
-          <h2 class="section-title">To buy list（購物清單）</h2>
-          <div class="k">✅ 支援新增 / 勾選完成 / 刪除；會自動儲存（localStorage）。</div>
-
-          <div class="todo-input">
-            <input id="todoInput" type="text" placeholder="例如：防曬、雨傘、零食、藥品…" />
-            <button class="btn" id="addTodoBtn">＋新增</button>
+        <!-- To-buy List -->
+        <article class="card">
+          <div class="toBuyHeader">
+            <div class="cardTitle">
+              <h2>🧸 To‑buy 手信清單（可愛版）</h2>
+              <div class="meta">
+                <span class="chip">📷 上傳相</span>
+                <span class="chip">🏷️ 分類</span>
+                <span class="chip">✏️ 可編輯</span>
+              </div>
+            </div>
+            <button class="btn btnGhost" id="btnSeed">一鍵加推薦</button>
           </div>
 
-          <div class="todo-list" id="todoList"></div>
-          <div class="k" id="todoHint" style="margin-top:10px;"></div>
-        </div>
-      </section>
-    </section>
+          <div class="toBuyForm" aria-label="新增手信">
+            <input class="input full" id="tbName" placeholder="手信名稱（例：明太子／長崎蛋糕／通りもん）">
+            <select class="input" id="tbCat">
+              <option value="美食">美食</option>
+              <option value="甜品">甜品</option>
+              <option value="零食">零食</option>
+              <option value="咖啡/茶">咖啡/茶</option>
+              <option value="藥妝">藥妝</option>
+              <option value="紀念品">紀念品</option>
+              <option value="其他">其他</option>
+            </select>
+            <input class="input" id="tbNote" placeholder="備註（例：買俾同事/屋企人、想要幾多盒）">
 
+            <div class="photoRow full">
+              <div class="thumb" id="tbThumb">+</div>
+              <input class="input" id="tbPhoto" type="file" accept="image/*">
+            </div>
+
+            <button class="btn full" id="tbAdd">加入清單</button>
+          </div>
+
+          <div class="status" id="tbStatus"></div>
+
+          <div style="height:10px"></div>
+          <div id="tbList" aria-label="手信列表"></div>
+        </article>
+      </section>
+
+      <!-- 天氣 -->
+      <section class="section" id="panel-weather" role="tabpanel" aria-labelledby="tab-weather">
+        <p class="tagline">
+          呢度係「真天氣 API」版本：會按你行程城市（熊本 / 阿蘇 / 別府 / 由布院 / 福岡）拉 7 日預報，方便你決定行程節奏同穿搭。[1](https://cathaypacificairways-my.sharepoint.com/personal/tiffany_w_wong_cathaypacific_com/_layouts/15/Doc.aspx?sourcedoc=%7BB223AC61-D454-48AD-91CF-8A29F7788209%7D&file=%E4%B9%9D%E5%B7%9E%E5%85%AD%E6%97%A5%E8%87%AA%E9%A7%95%E8%A1%8C%E7%A8%8B%E8%A6%8F%E5%8A%83.xlsx&action=default&mobileredirect=true)
+        </p>
+
+        <article class="card">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <h2>☁️ 天氣預報（7 日）</h2>
+              <div class="meta">
+                <span class="chip">免 Key</span>
+                <span class="chip">自動城市</span>
+                <span class="chip">可自訂</span>
+              </div>
+            </div>
+            <div class="rowBtns">
+              <button class="btn" id="btnWeather">更新天氣</button>
+              <button class="btn btnGhost" id="btnUseItinCities">用行程城市</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <input class="input" id="cityInput" placeholder="想加城市？例：長崎 / 鳥栖 / 太宰府">
+            <button class="btn" id="btnAddCity">加入</button>
+          </div>
+          <div class="hint">💡 你加嘅城市會保存喺本機（localStorage），下次開都仲喺度。</div>
+
+          <div class="status" id="wStatus"></div>
+          <div style="height:10px"></div>
+          <div id="weatherCards"></div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Bottom floating nav -->
+    <nav class="bottomNav" aria-label="底部導覽">
+      <div class="navRow">
+        <button class="navBtn is-active" data-nav="itin" type="button">🗺️ 行程</button>
+        <button class="navBtn" data-nav="guide" type="button">📌 指南</button>
+        <button class="navBtn" data-nav="weather" type="button">☁️ 天氣</button>
+      </div>
+    </nav>
   </div>
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav" aria-label="底部導覽">
-    <div class="navwrap">
-      <button class="navbtn active" data-view="home">
-        <div class="ico">🏠</div><div class="txt">Home</div>
-      </button>
-      <button class="navbtn" data-view="budget">
-        <div class="ico">💴</div><div class="txt">Budget</div>
-      </button>
-      <button class="navbtn" data-view="tobuy">
-        <div class="ico">🛍️</div><div class="txt">To buy list</div>
-      </button>
+  <!-- Bottom sheet -->
+  <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+  <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="行程詳情">
+    <div class="grabber"></div>
+    <div class="sheetHead">
+      <h4 id="sheetTitle">行程詳情</h4>
+      <button class="close" id="sheetClose" aria-label="關閉">✕</button>
     </div>
-  </nav>
-</div>
+    <p id="sheetDesc">點 Day 卡「查看詳情」會顯示內容。</p>
+    <div class="grid" id="sheetGrid"></div>
+  </aside>
 
-<script>
-  // =============================
-  // Data (your itinerary)
-  // =============================
-  const days = [
-    {
-      id: 1, title: "✈️ 第1天 - 2026-05-07（熊本）", weather: "(天氣資料尚未提供)",
-      note: "重點：抵達 → 租車 → 太宰府 → 熊本美食 & 逛街",
-      items: [
-        { time:"08:15", type:"交通", icon:"🚗", note:"CX512 HKG→FUK 航班", cost:0 },
-        { time:"14:00", type:"交通", icon:"🚗", note:"租車公司取車（大7人車）", cost:18000, map:"福岡 租車" },
-        { time:"15:00", type:"餐飲", icon:"🍜", note:"太宰府天滿宮周邊 - 和牛明太神樂（和牛明太子蓋飯）", cost:2500, map:"和牛明太神樂 太宰府" },
-        { time:"16:30", type:"景點", icon:"🏯", note:"太宰府天滿宮參拜、星巴克咖啡", cost:0, map:"太宰府天滿宮" },
-        { time:"19:30", type:"餐飲", icon:"🍜", note:"熊本下通購物街 - 馬櫻 馬肉料理（馬肉刺身/燒肉）", cost:5000, map:"馬櫻 熊本" },
-        { time:"21:00", type:"購物", icon:"🛍️", note:"下通購物街", cost:0, map:"熊本 下通購物街" },
-        { time:"22:30", type:"住宿", icon:"🏨", note:"熊本花開酒店", cost:13200, map:"熊本花開酒店" },
-      ]
-    },
-    {
-      id: 2, title: "🌋 第2天 - 2026-05-08（別府）", weather: "(天氣資料尚未提供)",
-      note: "重點：熊本咖啡 → 阿蘇大觀峰 & 火山風景 → 別府地雞",
-      items: [
-        { time:"08:30", type:"餐飲", icon:"☕", note:"熊本飯店周邊 - Licht Coffee & Cakes（精品手沖）", cost:800, map:"Licht Coffee & Cakes 熊本" },
-        { time:"10:30", type:"景點", icon:"🏯", note:"阿蘇大觀峰 展望台", cost:0, map:"阿蘇大觀峰 展望台" },
-        { time:"12:00", type:"餐飲", icon:"🍜", note:"阿蘇景觀餐廳 - 阿蘇庭 山見茶屋（赤牛丼）", cost:2000, map:"阿蘇庭 山見茶屋" },
-        { time:"13:30", type:"景點", icon:"🏯", note:"草千里之濱、阿蘇火山口景觀", cost:0, map:"草千里ヶ浜 阿蘇" },
-        { time:"19:30", type:"餐飲", icon:"🍜", note:"別府車站周邊 - 食道樂 とさか（炭火燒地雞）", cost:3500, map:"食道樂 とさか 別府" },
-        { time:"22:00", type:"住宿", icon:"🏨", note:"別府 AMANEK", cost:16500, map:"AMANEK Beppu" },
-      ]
-    },
-    {
-      id: 3, title: "♨️ 第3天 - 2026-05-09（別府）", weather: "(天氣資料尚未提供)",
-      note: "重點：別府咖啡 → 由布院散策 → 地獄巡禮 → 拉麵",
-      items: [
-        { time:"09:00", type:"餐飲", icon:"☕", note:"別府高人氣精品咖啡 - In Bloom Coffee（飯店車程8分）", cost:800, map:"In Bloom Coffee Beppu" },
-        { time:"10:30", type:"景點", icon:"🏯", note:"由布院散策、金鱗湖、湯之坪街道", cost:0, map:"由布院 金鱗湖" },
-        { time:"12:00", type:"餐飲", icon:"🍜", note:"由布院名店 - 鰻之成瀨（極上鰻魚重）", cost:2500, map:"鰻之成瀨 由布院" },
-        { time:"15:30", type:"景點", icon:"🏯", note:"別府地獄巡禮（海、血池地獄）", cost:0, map:"別府 地獄巡禮 海地獄 血池地獄" },
-        { time:"19:30", type:"餐飲", icon:"🍜", note:"別府市區 - 三湯拉麵（豚骨拉麵/煎餃）", cost:1000, map:"三湯拉麵 別府" },
-        { time:"22:00", type:"住宿", icon:"🏨", note:"別府 AMANEK", cost:16500, map:"AMANEK Beppu" },
-      ]
-    },
-    {
-      id: 4, title: "🦁 第4天 - 2026-05-10（福岡）", weather: "(天氣資料尚未提供)",
-      note: "重點：咖啡 → 自駕動物園 → Outlet → 料亭",
-      items: [
-        { time:"08:30", type:"餐飲", icon:"☕", note:"別府飯店周邊 - Kamenos（老屋改裝咖啡）", cost:1000, map:"Kamenos Beppu Cafe" },
-        { time:"10:00", type:"景點", icon:"🦁", note:"九州自然動物園（自駕入場）", cost:0, map:"九州自然動物園" },
-        { time:"13:00", type:"餐飲", icon:"🍜", note:"湯布院/別府周邊 - 山椒咖哩烏龍麵 菊すけ", cost:1500, map:"菊すけ 山椒 カレーうどん" },
-        { time:"15:30", type:"購物", icon:"🛍️", note:"鳥栖 Premium Outlets", cost:0, map:"Tosu Premium Outlets" },
-        { time:"20:30", type:"餐飲", icon:"🍣", note:"福岡頂級料亭 - 稚加榮 料亭（活魚刺身/明太子）", cost:6000, map:"稚加榮 福岡" },
-        { time:"22:00", type:"住宿", icon:"🏨", note:"西鐵格蘭登飯店", cost:15000, map:"西鐵格蘭登飯店 福岡" },
-      ]
-    },
-    {
-      id: 5, title: "🌸 第5天 - 2026-05-11（福岡）", weather: "(天氣資料尚未提供)",
-      note: "重點：天神咖啡 → 高級壽司早午餐 → 能古島賞花 → 屋台",
-      items: [
-        { time:"09:00", type:"餐飲", icon:"☕", note:"天神區最強咖啡 - REC COFFEE（岩田屋店）", cost:800, map:"REC COFFEE 岩田屋" },
-        { time:"11:00", type:"餐飲", icon:"🍣", note:"福岡市區高級壽司 - 鮨 紫 壽司（師傅發辦早午餐）", cost:5000, map:"鮨 紫 福岡" },
-        { time:"14:00", type:"景點", icon:"🏝️", note:"能古島賞花（自駕上渡輪、泊車）", cost:0, map:"能古島 福岡" },
-        { time:"20:30", type:"餐飲", icon:"🍢", note:"博多文化體驗 - 天神屋台（博多在地美食）", cost:2500, map:"天神 屋台 福岡" },
-        { time:"22:00", type:"住宿", icon:"🏨", note:"西鐵格蘭登飯店", cost:15000, map:"西鐵格蘭登飯店 福岡" },
-      ]
-    },
-    {
-      id: 6, title: "🛫 第6天 - 2026-05-12（福岡）", weather: "(天氣資料尚未提供)",
-      note: "重點：市場海鮮 → 咖啡 → 回港航班",
-      items: [
-        { time:"09:00", type:"餐飲", icon:"🍜", note:"柳橋連合市場 - 海鮮丼 / 明太子飯糰", cost:2000, map:"柳橋連合市場 福岡" },
-        { time:"11:30", type:"餐飲", icon:"☕", note:"天神手沖老店 - 珈琲美美（大濠公園旁）", cost:800, map:"珈琲美美 福岡" },
-        { time:"16:15", type:"交通", icon:"🚗", note:"CX529 FUK→HKG 航班", cost:0 },
-      ]
+  <script>
+    // -----------------------------
+    // Utils
+    // -----------------------------
+    const $ = (s, p=document) => p.querySelector(s);
+    const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+    const ls = {
+      get(k, fallback){ try{ return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch{ return fallback; } },
+      set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+    };
+    const encode = (s) => encodeURIComponent(s);
+
+    // Header shadow on scroll
+    const header = $("#header");
+    window.addEventListener("scroll", () => header.classList.toggle("is-scrolled", window.scrollY > 2), {passive:true});
+
+    // Tabs switching
+    const tabButtons = $$(".tab");
+    const panels = { itin: $("#panel-itin"), guide: $("#panel-guide"), weather: $("#panel-weather") };
+    function setActive(key){
+      Object.entries(panels).forEach(([k, el]) => el.classList.toggle("is-active", k===key));
+      tabButtons.forEach(btn => btn.setAttribute("aria-selected", btn.id === `tab-${key}` ? "true" : "false"));
+      $$(".navBtn").forEach(btn => btn.classList.toggle("is-active", btn.dataset.nav === key));
+      document.body.animate([{transform:"translateY(0px)"},{transform:"translateY(.5px)"},{transform:"translateY(0px)"}], {duration:120, easing:"ease-out"});
     }
-  ];
+    tabButtons.forEach(btn => btn.addEventListener("click", () => setActive(btn.id.replace("tab-",""))));
+    $$(".navBtn").forEach(btn => btn.addEventListener("click", () => setActive(btn.dataset.nav)));
 
-  // Helpers
-  const yen = (n) => "¥" + (Number(n)||0).toLocaleString("en-US");
-  const mapUrl = (q) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
-  const sumDay = (d) => d.items.reduce((acc, it)=> acc + (Number(it.cost)||0), 0);
-  const sumAll = () => days.reduce((acc, d)=> acc + sumDay(d), 0);
+    // -----------------------------
+    // Google Maps helpers
+    // -----------------------------
+    // Search by name (works well for restaurants/attractions)
+    function openMapSearch(query){
+      const url = `https://www.google.com/maps/search/?api=1&query=${encode(query)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+    // Directions to destination
+    function openMapDir(dest){
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${encode(dest)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
 
-  // State
-  let activeDay = 1;
-  let activeType = "ALL";
-  let paidOnly = false;
+    // -----------------------------
+    // Itinerary data (from your Excel Day1–Day6)
+    // -----------------------------
+    // Note: Text/places are directly mapped from the uploaded itinerary sheet. [1](https://cathaypacificairways-my.sharepoint.com/personal/tiffany_w_wong_cathaypacific_com/_layouts/15/Doc.aspx?sourcedoc=%7BB223AC61-D454-48AD-91CF-8A29F7788209%7D&file=%E4%B9%9D%E5%B7%9E%E5%85%AD%E6%97%A5%E8%87%AA%E9%A7%95%E8%A1%8C%E7%A8%8B%E8%A6%8F%E5%8A%83.xlsx&action=default&mobileredirect=true)
+    const itinerary = [
+      {
+        key:"day1", day:"Day 1", date:"5/7（四）", route:"香港 → 福岡 → 熊本",
+        chips:["📍 太宰府","🍚 和牛明太","🥩 馬肉料理"],
+        hotel:"熊本花開酒店",
+        highlights:[
+          {icon:"✈️", title:"CX512（HKG → FUK）", sub:"飛機餐 / 到達福岡"},
+          {icon:"🚗", title:"租車公司取車（大7人車）", sub:"開始自駕！"},
+          {icon:"⛩️", title:"太宰府天滿宮 參拜 + 星巴克", sub:"散步＋咖啡"},
+          {icon:"🍚", title:"午餐：和牛明太神樂（和牛明太子蓋飯）", sub:"太宰府周邊"},
+          {icon:"🥩", title:"晚餐：馬櫻（馬肉刺身/燒肉）", sub:"熊本下通購物街"},
+          {icon:"🛍️", title:"下通購物街 Shopping", sub:"晚飯後順路行"}
+        ],
+        mapPins:[
+          {label:"太宰府天滿宮", query:"太宰府天満宮"},
+          {label:"和牛明太神樂", query:"和牛明太 神楽 太宰府"},
+          {label:"馬櫻（熊本）", query:"馬桜 熊本 下通"},
+          {label:"熊本下通購物街", query:"熊本 下通商店街"}
+        ],
+        sheet:{
+          title:"Day 1｜福岡到着 → 熊本食爆",
+          desc:"第一日唔好排太緊：太宰府舒服行，夜晚熊本下通食馬肉最正～",
+          blocks:[
+            {t:"✅ 必食清單", li:["和牛明太子蓋飯（和牛明太神樂）","馬刺/燒肉（馬櫻）"]},
+            {t:"🗺️ 交通節奏", li:["福岡取車後先去太宰府","傍晚入熊本市區行街+晚餐"]},
+            {t:"🏨 住宿", li:["熊本花開酒店"]}
+          ]
+        }
+      },
+      {
+        key:"day2", day:"Day 2", date:"5/8（五）", route:"熊本 → 阿蘇 → 別府",
+        chips:["🌋 阿蘇","🍚 赤牛丼","🐔 地雞炭燒"],
+        hotel:"別府 AMANEK",
+        highlights:[
+          {icon:"☕", title:"早餐：Licht Coffee & Cakes", sub:"熊本飯店周邊"},
+          {icon:"🏞️", title:"阿蘇大觀峰 展望台", sub:"風景位"},
+          {icon:"🍚", title:"午餐：阿蘇庭 山見茶屋（赤牛丼）", sub:"阿蘇景觀餐廳"},
+          {icon:"🌋", title:"草千里之濱 / 阿蘇火山口景觀", sub:"視天氣/管制"},
+          {icon:"🐔", title:"晚餐：食道樂 とさか（炭火燒地雞）", sub:"別府車站周邊"}
+        ],
+        mapPins:[
+          {label:"Licht Coffee & Cakes", query:"Licht Coffee & Cakes 熊本"},
+          {label:"阿蘇大觀峰", query:"大観峰 阿蘇"},
+          {label:"阿蘇庭 山見茶屋", query:"阿蘇庭 山見茶屋"},
+          {label:"草千里之浜", query:"草千里ヶ浜"},
+          {label:"食道樂 とさか", query:"食道楽 とさか 別府"}
+        ],
+        sheet:{
+          title:"Day 2｜阿蘇自然日 → 別府落腳",
+          desc:"今日景點同風景多：早啲去大觀峰，光線靚好多～",
+          blocks:[
+            {t:"✅ 必食清單", li:["赤牛丼（阿蘇庭 山見茶屋）","炭火燒地雞（食道樂 とさか）"]},
+            {t:"🌋 影相位", li:["大觀峰","草千里"]},
+            {t:"🏨 住宿", li:["別府 AMANEK"]}
+          ]
+        }
+      },
+      {
+        key:"day3", day:"Day 3", date:"5/9（六）", route:"由布院 → 別府（續住）",
+        chips:["♨️ 由布院","🍱 鰻魚重","🌋 地獄巡禮"],
+        hotel:"別府 AMANEK（續住）",
+        highlights:[
+          {icon:"☕", title:"早餐：In Bloom Coffee", sub:"別府高人氣精品咖啡（車程約8分）"},
+          {icon:"🛍️", title:"由布院散策（金鱗湖 / 湯之坪街道）", sub:"慢慢行"},
+          {icon:"🍱", title:"午餐：鰻之成瀨（極上鰻魚重）", sub:"由布院名店"},
+          {icon:"😈", title:"別府地獄巡禮（海/血池地獄）", sub:"打卡位"},
+          {icon:"🍜", title:"晚餐：三湯拉麵（豚骨拉麵/煎餃）", sub:"別府市區"}
+        ],
+        mapPins:[
+          {label:"In Bloom Coffee", query:"In Bloom Coffee 別府"},
+          {label:"金鱗湖", query:"金鱗湖 由布院"},
+          {label:"湯之坪街道", query:"湯の坪街道 由布院"},
+          {label:"鰻之成瀨", query:"鰻の成瀬 由布院"},
+          {label:"別府地獄巡禮", query:"別府地獄めぐり"},
+          {label:"三湯拉麵", query:"三湯ラーメン 別府"}
+        ],
+        sheet:{
+          title:"Day 3｜由布院慢活 + 別府地獄巡禮",
+          desc:"今日係「溫泉小鎮feel」＋「打卡景點」混合：由布院記得留時間慢慢行。",
+          blocks:[
+            {t:"✅ 必食清單", li:["鰻魚重（鰻之成瀨）","拉麵+煎餃（三湯拉麵）"]},
+            {t:"♨️ 路線", li:["上午：由布院散策","下午：別府地獄巡禮","晚上：市區拉麵收尾"]},
+            {t:"🏨 住宿", li:["別府 AMANEK（續住）"]}
+          ]
+        }
+      },
+      {
+        key:"day4", day:"Day 4", date:"5/10（日）", route:"別府 → 鳥栖 → 福岡",
+        chips:["🦁 動物園","🛍️ Outlets","🍣 料亭"],
+        hotel:"西鐵格蘭登飯店",
+        highlights:[
+          {icon:"☕", title:"早餐：Kamenos（亀の井）咖啡", sub:"老屋改裝咖啡"},
+          {icon:"🦁", title:"九州自然動物園（自駕入場）", sub:"特色：車上睇動物"},
+          {icon:"🍛", title:"午餐：山椒咖哩烏龍麵 菊すけ", sub:"湯布院/別府周邊"},
+          {icon:"🛍️", title:"鳥栖 Premium Outlets Shopping", sub:"補貨時間"},
+          {icon:"🍣", title:"晚餐：稚加榮 料亭（活魚刺身/明太子）", sub:"福岡頂級料亭"}
+        ],
+        mapPins:[
+          {label:"Kamenos（亀の井）", query:"亀の井 別府 カフェ"},
+          {label:"九州自然動物園", query:"九州自然動物公園 アフリカンサファリ"},
+          {label:"菊すけ", query:"菊すけ 山椒カレーうどん"},
+          {label:"鳥栖 Premium Outlets", query:"鳥栖プレミアムアウトレット"},
+          {label:"稚加榮 料亭", query:"稚加榮 福岡"}
+        ],
+        sheet:{
+          title:"Day 4｜Safari + Outlets + 福岡料亭",
+          desc:"今日比較豐富：動物園＋購物＋高級晚餐，一日三連擊～",
+          blocks:[
+            {t:"✅ 必食清單", li:["山椒咖哩烏龍麵（菊すけ）","活魚刺身/明太子（稚加榮）"]},
+            {t:"🛍️ 補貨", li:["鳥栖 Premium Outlets"]},
+            {t:"🏨 住宿", li:["西鐵格蘭登飯店（福岡）"]}
+          ]
+        }
+      },
+      {
+        key:"day5", day:"Day 5", date:"5/11（一）", route:"能古島 → 福岡天神（續住）",
+        chips:["🌸 能古島","🍣 Omakase","🍢 屋台"],
+        hotel:"西鐵格蘭登（續住）",
+        highlights:[
+          {icon:"☕", title:"早餐：REC COFFEE（岩田屋店）", sub:"天神區人氣咖啡"},
+          {icon:"🍣", title:"午餐：鮨 紫（師傅發辦早午餐）", sub:"福岡市區高級壽司"},
+          {icon:"🌸", title:"能古島賞花（自駕上渡輪、泊車）", sub:"賞花散步"},
+          {icon:"🍢", title:"晚餐：天神屋台（博多在地美食）", sub:"文化體驗"}
+        ],
+        mapPins:[
+          {label:"REC COFFEE 岩田屋", query:"REC COFFEE 岩田屋 福岡"},
+          {label:"鮨 紫", query:"鮨 紫 福岡"},
+          {label:"能古島", query:"能古島 のこのしま"},
+          {label:"天神屋台", query:"天神 屋台 福岡"}
+        ],
+        sheet:{
+          title:"Day 5｜能古島賞花 + 天神屋台",
+          desc:"今日好 chill：白天賞花、夜晚屋台文化體驗，節奏舒服又有特色。",
+          blocks:[
+            {t:"✅ 必食清單", li:["精品咖啡（REC COFFEE）","Omakase（鮨 紫）","屋台小食（天神屋台）"]},
+            {t:"🌸 行程提醒", li:["能古島要配合渡輪班次","建議預鬆回市區時間"]},
+            {t:"🏨 住宿", li:["西鐵格蘭登（續住）"]}
+          ]
+        }
+      },
+      {
+        key:"day6", day:"Day 6", date:"5/12（二）", route:"福岡 → 香港（回程日）",
+        chips:["🐟 市場早餐","☕ 最後咖啡","✈️ 回程"],
+        hotel:"—",
+        highlights:[
+          {icon:"🐟", title:"早餐：柳橋連合市場（海鮮丼/明太子飯糰）", sub:"最後衝刺"},
+          {icon:"☕", title:"最後咖啡：珈琲美美（大濠公園旁）", sub:"手沖老店"},
+          {icon:"✈️", title:"CX529（FUK → HKG）", sub:"飛機餐 / 回程"}
+        ],
+        mapPins:[
+          {label:"柳橋連合市場", query:"柳橋連合市場 福岡"},
+          {label:"珈琲美美", query:"珈琲美美 福岡 大濠公園"},
+          {label:"福岡機場", query:"福岡空港"}
+        ],
+        sheet:{
+          title:"Day 6｜回程日（收尾要靚）",
+          desc:"今日最緊要唔好趕：市場早餐＋最後咖啡，然後安心去機場。",
+          blocks:[
+            {t:"✅ 必做", li:["預鬆時間還車/入油（如有）","檢查手信與行李重量"]},
+            {t:"✅ 必食", li:["柳橋連合市場 海鮮丼","珈琲美美 手沖"]},
+            {t:"✈️ 航班", li:["CX529（FUK → HKG）"]}
+          ]
+        }
+      }
+    ];
 
-  // Elements
-  const viewHome = document.getElementById("view-home");
-  const viewBudget = document.getElementById("view-budget");
-  const viewToBuy = document.getElementById("view-tobuy");
-  const navButtons = Array.from(document.querySelectorAll(".navbtn"));
+    // -----------------------------
+    // Build Day carousel
+    // -----------------------------
+    const dayCarousel = $("#dayCarousel");
 
-  const tablist = document.getElementById("tablist");
-  const panelsEl = document.getElementById("panels");
-  const dayStrip = document.getElementById("dayStrip");
+    function buildDayCard(d){
+      const chips = d.chips.map(c => `<span class="chip">${c}</span>`).join("");
+      const topItems = d.highlights.slice(0,3).map(x => `
+        <li class="li">
+          <div class="icon">${x.icon}</div>
+          <div class="txt">
+            <b>${x.title}</b>
+            <span>${x.sub || ""}</span>
+          </div>
+        </li>
+      `).join("");
 
-  const searchInput = document.getElementById("searchInput");
-  const chips = Array.from(document.querySelectorAll(".chip[data-filter]"));
-  const paidOnlyChip = document.getElementById("paidOnlyChip");
-  const resetBtn = document.getElementById("resetBtn");
+      const mapBtns = d.mapPins.map(p => `
+        <button class="mapBtn" type="button" data-map="${encodeURIComponent(p.query)}">🗺️ ${p.label}</button>
+      `).join("");
 
-  const totalBudgetEl = document.getElementById("totalBudget");
-  const filteredBudgetEl = document.getElementById("filteredBudget");
-  const filteredCountEl = document.getElementById("filteredCount");
-
-  // Budget view elements
-  const budgetTotalEl = document.getElementById("budgetTotal");
-  const budgetAvgEl = document.getElementById("budgetAvg");
-  const budgetMaxDayEl = document.getElementById("budgetMaxDay");
-  const budgetByDayEl = document.getElementById("budgetByDay");
-  const budgetByTypeEl = document.getElementById("budgetByType");
-
-  // To buy view elements
-  const todoInput = document.getElementById("todoInput");
-  const addTodoBtn = document.getElementById("addTodoBtn");
-  const todoListEl = document.getElementById("todoList");
-  const todoHintEl = document.getElementById("todoHint");
-
-  // ========== Home render ==========
-  function renderDayStrip(){
-    dayStrip.innerHTML = "";
-    days.forEach(d => {
-      const b = document.createElement("button");
-      b.className = "daybtn" + (d.id === activeDay ? " active" : "");
-      b.textContent = `第${d.id}天`;
-      b.addEventListener("click", () => setDay(d.id));
-      dayStrip.appendChild(b);
-    });
-  }
-
-  function renderTabs(){
-    tablist.innerHTML = "";
-    days.forEach(d => {
-      const btn = document.createElement("button");
-      btn.className = "tab";
-      btn.setAttribute("role","tab");
-      btn.id = `tab-day${d.id}`;
-      btn.setAttribute("aria-controls", `panel-day${d.id}`);
-      btn.setAttribute("aria-selected", d.id === activeDay ? "true":"false");
-      btn.tabIndex = d.id === activeDay ? 0 : -1;
-      btn.textContent = `第${d.id}天`;
-      btn.addEventListener("click", ()=> setDay(d.id));
-      tablist.appendChild(btn);
-    });
-
-    // keyboard for tabs
-    const tabs = Array.from(tablist.querySelectorAll(".tab"));
-    tabs.forEach((t, idx) => {
-      t.addEventListener("keydown", (e) => {
-        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-        e.preventDefault();
-        const nextIdx = e.key === "ArrowRight" ? (idx+1)%tabs.length : (idx-1+tabs.length)%tabs.length;
-        tabs[nextIdx].focus();
-        tabs[nextIdx].click();
-      });
-    });
-  }
-
-  function renderPanels(){
-    panelsEl.innerHTML = "";
-    days.forEach(d => {
-      const panel = document.createElement("section");
-      panel.className = "panel" + (d.id === activeDay ? " active" : "");
-      panel.setAttribute("role","tabpanel");
-      panel.id = `panel-day${d.id}`;
-      panel.setAttribute("aria-labelledby", `tab-day${d.id}`);
-      panel.dataset.day = String(d.id);
-
-      panel.innerHTML = `
-        <div class="day-head">
-          <div>
-            <div class="day-title">
-              ${d.title}
-              <span class="day-budget">💴 預算：${yen(sumDay(d))}</span>
+      return `
+        <article class="dayCard" data-day="${d.key}">
+          <div class="dayTop">
+            <div class="dayTitle">
+              <h3>${d.day}｜${d.route}</h3>
+              <div class="small">
+                <span class="chip">📅 ${d.date}</span>
+                ${d.hotel ? `<span class="chip">🏨 ${d.hotel}</span>` : ""}
+              </div>
+              <div class="meta" style="margin-top:8px">${chips}</div>
             </div>
-            <div class="day-note">${d.note}</div>
+            <button class="btn" type="button" data-open="${d.key}">查看詳情</button>
           </div>
-          <div class="weather">${d.weather}</div>
-        </div>
 
-        <div class="list" id="list-day${d.id}"></div>
-        <div class="empty" id="empty-day${d.id}">沒有符合目前篩選/搜尋條件的活動。</div>
-      `;
+          <ul class="list">${topItems}</ul>
 
-      panelsEl.appendChild(panel);
-      renderList(d.id);
-    });
-  }
-
-  function renderList(dayId){
-    const day = days.find(x => x.id === dayId);
-    const list = document.getElementById(`list-day${dayId}`);
-    if (!day || !list) return;
-
-    list.innerHTML = "";
-    day.items.forEach((it) => {
-      const item = document.createElement("div");
-      item.className = "item";
-      item.dataset.type = it.type;
-      item.dataset.cost = String(it.cost || 0);
-      item.dataset.text = (it.note || "") + " " + (it.map || "");
-
-      // ✅ FIX: Always create proper <a> tag when map exists
-      const mapBtn = it.map
-        ? `<a class="map" href="${mapUrl(it.map)}" target="_blank" rel="noopener">🗺️ 地圖</a>`
-        : "";
-
-      item.innerHTML = `
-        <div class="left">
-          <div class="time">${it.time}</div>
-          <div class="type">${it.icon || "•"} ${it.type}</div>
-        </div>
-        <div class="body">
-          <div class="mainline">${escapeHtml(it.note)}</div>
-          <div class="meta">
-            ${mapBtn}
-            <div class="cost">${yen(it.cost||0)}</div>
+          <div style="height:10px"></div>
+          <div class="rowBtns">
+            <button class="mapBtn" type="button" data-dir="${encodeURIComponent(d.route.split('→').pop().trim())}">🧭 導航終點</button>
+            ${mapBtns}
           </div>
-        </div>
+
+          <div style="height:8px"></div>
+          <div class="hint">💡 提示：可向右滑睇下一日（scroll‑snap 已開）</div>
+        </article>
       `;
-      list.appendChild(item);
-    });
-  }
-
-  function computeHomeTotals(){
-    totalBudgetEl.textContent = yen(sumAll());
-  }
-
-  function matches(itemEl, q){
-    const type = itemEl.dataset.type || "";
-    const cost = Number(itemEl.dataset.cost)||0;
-    const text = (itemEl.dataset.text || "") + " " + (itemEl.innerText || "");
-    if (activeType !== "ALL" && type !== activeType) return false;
-    if (paidOnly && cost <= 0) return false;
-    if (q && !text.toLowerCase().includes(q.toLowerCase())) return false;
-    return true;
-  }
-
-  function applyFilters(){
-    const panel = document.querySelector(`.panel[data-day="${activeDay}"]`);
-    if (!panel) return;
-
-    const q = (searchInput.value || "").trim();
-    const items = Array.from(panel.querySelectorAll(".item"));
-    const empty = document.getElementById(`empty-day${activeDay}`);
-
-    let shown = 0;
-    let sum = 0;
-
-    items.forEach(el => {
-      const ok = matches(el, q);
-      el.style.display = ok ? "" : "none";
-      if (ok){ shown++; sum += (Number(el.dataset.cost)||0); }
-    });
-
-    filteredCountEl.textContent = String(shown);
-    filteredBudgetEl.textContent = yen(sum);
-    if (empty) empty.style.display = shown === 0 ? "block" : "none";
-
-    // update day strip active
-    Array.from(dayStrip.querySelectorAll(".daybtn")).forEach((b, idx) => {
-      b.classList.toggle("active", idx+1 === activeDay);
-    });
-
-    // update tabs active
-    Array.from(tablist.querySelectorAll(".tab")).forEach((t, idx) => {
-      const isActive = idx+1 === activeDay;
-      t.setAttribute("aria-selected", isActive ? "true":"false");
-      t.tabIndex = isActive ? 0 : -1;
-    });
-  }
-
-  function setDay(dayId){
-    activeDay = dayId;
-    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    const activePanel = document.getElementById(`panel-day${dayId}`);
-    if (activePanel) activePanel.classList.add("active");
-
-    applyFilters();
-    if (window.innerWidth < 860) window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function setActiveChip(type){
-    activeType = type;
-    chips.forEach(c => c.classList.toggle("active", c.dataset.filter === type));
-    applyFilters();
-  }
-
-  function togglePaidOnly(){
-    paidOnly = !paidOnly;
-    paidOnlyChip.classList.toggle("active", paidOnly);
-    paidOnlyChip.setAttribute("aria-pressed", paidOnly ? "true":"false");
-    applyFilters();
-  }
-
-  function resetAll(){
-    searchInput.value = "";
-    paidOnly = false;
-    paidOnlyChip.classList.remove("active");
-    paidOnlyChip.setAttribute("aria-pressed","false");
-    setActiveChip("ALL");
-    applyFilters();
-  }
-
-  // ========== Budget view ==========
-  function renderBudgetView(){
-    const total = sumAll();
-    budgetTotalEl.textContent = yen(total);
-    budgetAvgEl.textContent = yen(total / days.length);
-
-    let maxDay = days[0];
-    days.forEach(d => { if (sumDay(d) > sumDay(maxDay)) maxDay = d; });
-    budgetMaxDayEl.textContent = `第${maxDay.id}天｜${yen(sumDay(maxDay))}`;
-
-    budgetByDayEl.innerHTML = "";
-    days.forEach(d => {
-      const row = document.createElement("div");
-      row.className = "row";
-      row.innerHTML = `
-        <div>
-          <div class="label">第${d.id}天</div>
-          <div class="sub">${escapeHtml(d.title.replace(/^.*第\\d天\\s-\\s/, ""))}</div>
-        </div>
-        <div class="right">${yen(sumDay(d))}</div>
-      `;
-      row.addEventListener("click", () => {
-        switchView("home");
-        setDay(d.id);
-      });
-      budgetByDayEl.appendChild(row);
-    });
-
-    const types = ["餐飲","交通","住宿","景點","購物"];
-    const typeTotals = Object.fromEntries(types.map(t => [t, 0]));
-    days.forEach(d => d.items.forEach(it => {
-      if (typeTotals[it.type] !== undefined) typeTotals[it.type] += (Number(it.cost)||0);
-    }));
-
-    const maxTypeValue = Math.max(...Object.values(typeTotals), 1);
-
-    budgetByTypeEl.innerHTML = "";
-    types.forEach(t => {
-      const v = typeTotals[t] || 0;
-      const pct = Math.round((v / maxTypeValue) * 100);
-      const card = document.createElement("div");
-      card.className = "baritem";
-      card.innerHTML = `
-        <div class="barhead">
-          <div class="barname">${t}</div>
-          <div class="barvalue">${yen(v)}</div>
-        </div>
-        <div class="track"><div class="fill" style="width:${pct}%;"></div></div>
-      `;
-      budgetByTypeEl.appendChild(card);
-    });
-  }
-
-  // ========== Bottom nav views ==========
-  function switchView(view){
-    viewHome.classList.toggle("active", view === "home");
-    viewBudget.classList.toggle("active", view === "budget");
-    viewToBuy.classList.toggle("active", view === "tobuy");
-    navButtons.forEach(b => b.classList.toggle("active", b.dataset.view === view));
-    if (view === "budget") renderBudgetView();
-  }
-
-  navButtons.forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
-
-  // ========== To buy list (localStorage) ==========
-  const STORAGE_KEY = "kyushu_tobuy_v1";
-  let todos = [];
-
-  function loadTodos(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      todos = raw ? JSON.parse(raw) : [];
-      if (!Array.isArray(todos)) todos = [];
-    } catch(e){
-      todos = [];
-    }
-  }
-
-  function saveTodos(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-  }
-
-  function renderTodos(){
-    todoListEl.innerHTML = "";
-    const doneCount = todos.filter(t => t.done).length;
-
-    if (todos.length === 0){
-      todoHintEl.textContent = "目前清單是空的～可以先加：eSIM、轉插、雨具、常備藥。";
-    } else {
-      todoHintEl.textContent = `共 ${todos.length} 項｜已完成 ${doneCount} 項`;
     }
 
-    todos.forEach((t, idx) => {
-      const row = document.createElement("div");
-      row.className = "todo-item";
-      row.innerHTML = `
-        <input type="checkbox" ${t.done ? "checked" : ""} aria-label="完成">
-        <div class="todo-text ${t.done ? "done" : ""}">${escapeHtml(t.text)}</div>
-        <button class="iconbtn" aria-label="刪除">🗑️</button>
-      `;
+    dayCarousel.innerHTML = itinerary.map(buildDayCard).join("");
 
-      const checkbox = row.querySelector('input[type="checkbox"]');
-      const delBtn = row.querySelector(".iconbtn");
-
-      checkbox.addEventListener("change", () => {
-        todos[idx].done = checkbox.checked;
-        saveTodos();
-        renderTodos();
-      });
-
-      delBtn.addEventListener("click", () => {
-        todos.splice(idx, 1);
-        saveTodos();
-        renderTodos();
-      });
-
-      todoListEl.appendChild(row);
+    // Map btn handlers
+    dayCarousel.addEventListener("click", (e) => {
+      const map = e.target.closest("[data-map]");
+      const dir = e.target.closest("[data-dir]");
+      if(map) return openMapSearch(decodeURIComponent(map.dataset.map));
+      if(dir) return openMapDir(decodeURIComponent(dir.dataset.dir));
     });
-  }
 
-  function addTodo(){
-    const text = (todoInput.value || "").trim();
-    if (!text) return;
-    todos.unshift({ text, done:false, created: Date.now() });
-    todoInput.value = "";
-    saveTodos();
-    renderTodos();
-  }
+    // -----------------------------
+    // Bottom sheet
+    // -----------------------------
+    const backdrop = $("#backdrop");
+    const sheet = $("#sheet");
+    const sheetClose = $("#sheetClose");
+    const sheetTitle = $("#sheetTitle");
+    const sheetDesc = $("#sheetDesc");
+    const sheetGrid = $("#sheetGrid");
 
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+    function openSheet(key){
+      const d = itinerary.find(x => x.key === key);
+      if(!d) return;
+      sheetTitle.textContent = d.sheet?.title || "行程詳情";
+      sheetDesc.textContent = d.sheet?.desc || "";
+      const blocks = d.sheet?.blocks || [];
+      sheetGrid.innerHTML = blocks.map(b => `
+        <div class="mini">
+          <b>${b.t}</b>
+          <ul>${(b.li||[]).map(x => `<li>${x}</li>`).join("")}</ul>
+        </div>
+      `).join("");
 
-  addTodoBtn.addEventListener("click", addTodo);
-  todoInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addTodo(); });
+      backdrop.classList.add("show");
+      sheet.classList.add("show");
+      backdrop.setAttribute("aria-hidden","false");
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    }
+    function closeSheet(){
+      backdrop.classList.remove("show");
+      sheet.classList.remove("show");
+      backdrop.setAttribute("aria-hidden","true");
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-open]");
+      if(btn) openSheet(btn.dataset.open);
+    });
+    sheetClose.addEventListener("click", closeSheet);
+    backdrop.addEventListener("click", closeSheet);
+    window.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeSheet(); });
 
-  // ========== Init ==========
-  function init(){
-    renderDayStrip();
-    renderTabs();
-    renderPanels();
+    // -----------------------------
+    // To-buy list (photo upload + category + edit)
+    // -----------------------------
+    const TB_KEY = "kyushu_tobuy_v1";
+    const tbName = $("#tbName");
+    const tbCat = $("#tbCat");
+    const tbNote = $("#tbNote");
+    const tbPhoto = $("#tbPhoto");
+    const tbThumb = $("#tbThumb");
+    const tbAdd = $("#tbAdd");
+    const tbList = $("#tbList");
+    const tbStatus = $("#tbStatus");
+    const btnSeed = $("#btnSeed");
 
-    computeHomeTotals();
-    setActiveChip("ALL");
-    applyFilters();
+    let tbPhotoData = ""; // base64 dataURL
+    let editingId = null;
 
-    chips.forEach(ch => ch.addEventListener("click", ()=> setActiveChip(ch.dataset.filter)));
-    paidOnlyChip.addEventListener("click", togglePaidOnly);
-    resetBtn.addEventListener("click", resetAll);
-    searchInput.addEventListener("input", applyFilters);
+    function setStatus(msg){
+      tbStatus.textContent = msg || "";
+      if(msg){
+        tbStatus.animate([{opacity:.4},{opacity:1}], {duration:180, easing:"ease-out"});
+      }
+    }
 
-    loadTodos();
-    renderTodos();
-  }
+    tbPhoto.addEventListener("change", async () => {
+      const file = tbPhoto.files?.[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        tbPhotoData = reader.result;
+        tbThumb.innerHTML = `<img alt="photo" src="${tbPhotoData}">`;
+      };
+      reader.readAsDataURL(file);
+    });
 
-  init();
-</script>
+    function getItems(){ return ls.get(TB_KEY, []); }
+    function saveItems(items){ ls.set(TB_KEY, items); renderItems(); }
+
+    function resetForm(){
+      tbName.value = "";
+      tbCat.value = "美食";
+      tbNote.value = "";
+      tbPhoto.value = "";
+      tbPhotoData = "";
+      tbThumb.textContent = "+";
+      editingId = null;
+      tbAdd.textContent = "加入清單";
+    }
+
+    function renderItems(){
+      const items = getItems();
+      if(!items.length){
+        tbList.innerHTML = `<div class="hint">而家未有手信～你可以按「一鍵加推薦」先起步。</div>`;
+        return;
+      }
+      tbList.innerHTML = items.map(item => `
+        <div class="toBuyItem" data-id="${item.id}">
+          <div class="thumb">
+            ${item.photo ? `<img alt="thumb" src="${item.photo}">` : `<span>🧸</span>`}
+          </div>
+          <div class="info">
+            <div class="top">
+              <span class="catTag">${item.cat}</span>
+              <span class="name">${escapeHtml(item.name)}</span>
+            </div>
+            ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : `<div class="note">（無備註）</div>`}
+          </div>
+          <div class="miniBtns">
+            <button class="miniBtn" data-edit>✏️</button>
+            <button class="miniBtn" data-del>🗑️</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function escapeHtml(s=""){
+      return s.replace(/[&<>"']/g, (c)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+    }
+
+    tbAdd.addEventListener("click", () => {
+      const name = tbName.value.trim();
+      const cat = tbCat.value;
+      const note = tbNote.value.trim();
+      if(!name) return setStatus("🥺 先輸入手信名稱啦～");
+
+      const items = getItems();
+      if(editingId){
+        const idx = items.findIndex(x => x.id === editingId);
+        if(idx >= 0){
+          items[idx] = { ...items[idx], name, cat, note, photo: tbPhotoData || items[idx].photo || "" };
+          saveItems(items);
+          setStatus("✅ 已更新手信～");
+          resetForm();
+        }
+        return;
+      }
+
+      items.unshift({
+        id: "i_" + Math.random().toString(16).slice(2),
+        name, cat, note,
+        photo: tbPhotoData || "",
+        ts: Date.now()
+      });
+      saveItems(items);
+      setStatus("✅ 已加入清單～");
+      resetForm();
+    });
+
+    tbList.addEventListener("click", (e) => {
+      const row = e.target.closest(".toBuyItem");
+      if(!row) return;
+      const id = row.dataset.id;
+      const items = getItems();
+
+      if(e.target.closest("[data-del]")){
+        const next = items.filter(x => x.id !== id);
+        saveItems(next);
+        setStatus("🗑️ 已刪除");
+        if(editingId === id) resetForm();
+        return;
+      }
+
+      if(e.target.closest("[data-edit]")){
+        const item = items.find(x => x.id === id);
+        if(!item) return;
+        tbName.value = item.name;
+        tbCat.value = item.cat;
+        tbNote.value = item.note || "";
+        tbPhotoData = item.photo || "";
+        tbThumb.innerHTML = tbPhotoData ? `<img alt="photo" src="${tbPhotoData}">` : "+";
+        editingId = id;
+        tbAdd.textContent = "更新此項";
+        setStatus("✏️ 編輯模式：改完按「更新此項」");
+        window.scrollTo({top: 0, behavior: "smooth"});
+      }
+    });
+
+    btnSeed.addEventListener("click", () => {
+      const items = getItems();
+      const seed = [
+        {name:"明太子（福岡）", cat:"美食", note:"可帶返香港做手信/早餐", photo:""},
+        {name:"長崎蛋糕（カステラ）", cat:"甜品", note:"切件方便分享", photo:""},
+        {name:"博多通りもん（如想）", cat:"甜品", note:"人氣款；買少少試味先", photo:""},
+        {name:"咖啡豆（REC/珈琲美美風格）", cat:"咖啡/茶", note:"自己沖／送咖啡友", photo:""}
+      ];
+      saveItems([...seed.map(x => ({...x, id:"s_"+Math.random().toString(16).slice(2), ts:Date.now()})), ...items]);
+      setStatus("✅ 已加入推薦清單～你可以再上傳相同改名/改分類");
+    });
+
+    renderItems();
+
+    // -----------------------------
+    // Weather (Open-Meteo, no key)
+    // - We'll use simple city coordinate mapping for itinerary cities.
+    // - User can add more cities; if unknown, we attempt geocoding via Open-Meteo geocoding endpoint.
+    // -----------------------------
+    const W_KEY = "kyushu_weather_cities_v1";
+    const weatherCards = $("#weatherCards");
+    const wStatus = $("#wStatus");
+    const btnWeather = $("#btnWeather");
+    const btnAddCity = $("#btnAddCity");
+    const btnUseItinCities = $("#btnUseItinCities");
+    const cityInput = $("#cityInput");
+
+    // baseline coords (approx)
+    const cityDB = {
+      "福岡": {lat:33.5902, lon:130.4017},
+      "熊本": {lat:32.8031, lon:130.7079},
+      "阿蘇": {lat:32.9520, lon:131.1210},
+      "別府": {lat:33.2794, lon:131.4970},
+      "由布院": {lat:33.2570, lon:131.3190},
+      "太宰府": {lat:33.5215, lon:130.5354},
+      "鳥栖": {lat:33.3774, lon:130.5062},
+      "長崎": {lat:32.7503, lon:129.8777}
+    };
+
+    function getCities(){
+      return ls.get(W_KEY, ["熊本","阿蘇","別府","由布院","福岡"]);
+    }
+    function setCities(arr){
+      const uniq = [...new Set(arr.map(s => s.trim()).filter(Boolean))];
+      ls.set(W_KEY, uniq);
+      renderCityChips();
+    }
+
+    function renderCityChips(){
+      const cities = getCities();
+      wStatus.textContent = cities.length ? `目前城市：${cities.join("、")}` : "尚未有城市";
+    }
+    renderCityChips();
+
+    btnUseItinCities.addEventListener("click", () => {
+      // derive from itinerary route (simple)
+      const base = ["熊本","阿蘇","別府","由布院","福岡","太宰府","鳥栖"];
+      setCities(base);
+      wStatus.textContent = `已套用行程城市：${getCities().join("、")}`;
+    });
+
+    btnAddCity.addEventListener("click", () => {
+      const v = cityInput.value.trim();
+      if(!v) return;
+      setCities([v, ...getCities()]);
+      cityInput.value = "";
+      wStatus.textContent = `已加入：${v}（按「更新天氣」拉預報）`;
+    });
+
+    function wIcon(code){
+      // Open-Meteo weathercode rough mapping (simplified)
+      if(code === 0) return "☀️";
+      if([1,2].includes(code)) return "⛅";
+      if(code === 3) return "☁️";
+      if([45,48].includes(code)) return "🌫️";
+      if([51,53,55,56,57].includes(code)) return "🌦️";
+      if([61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+      if([71,73,75,77,85,86].includes(code)) return "🌨️";
+      if([95,96,99].includes(code)) return "⛈️";
+      return "☁️";
+    }
+
+    async function geocodeCity(name){
+      // Use Open-Meteo Geocoding if cityDB doesn't have it
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encode(name)}&count=1&language=zh&format=json`;
+      const r = await fetch(url);
+      if(!r.ok) throw new Error("geocode_failed");
+      const j = await r.json();
+      const res = j?.results?.[0];
+      if(!res) return null;
+      return {lat: res.latitude, lon: res.longitude, display: res.name};
+    }
+
+    async function fetchForecast(lat, lon){
+      // Daily summary for 7 days
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo`;
+      const r = await fetch(url);
+      if(!r.ok) throw new Error("forecast_failed");
+      return r.json();
+    }
+
+    function renderWeatherCard(city, data){
+      const days = data?.daily;
+      if(!days) return "";
+
+      const rows = days.time.slice(0,7).map((t, i) => {
+        const icon = wIcon(days.weathercode[i]);
+        const hi = Math.round(days.temperature_2m_max[i]);
+        const lo = Math.round(days.temperature_2m_min[i]);
+        const pop = days.precipitation_probability_max?.[i];
+        const label = t.slice(5).replace("-", "/"); // MM/DD
+        return `
+          <li class="li">
+            <div class="icon">${icon}</div>
+            <div class="txt">
+              <b>${label}｜${hi}° / ${lo}°</b>
+              <span>降雨機率：${(pop ?? "—")}${pop!=null ? "%" : ""}</span>
+            </div>
+          </li>
+        `;
+      }).join("");
+
+      return `
+        <article class="card">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <h2>📍 ${city}</h2>
+              <div class="meta">
+                <span class="chip">7日預報</span>
+                <span class="chip">最高/最低溫</span>
+                <span class="chip">降雨機率</span>
+              </div>
+            </div>
+            <div class="rowBtns">
+              <button class="mapBtn" type="button" data-map="${encodeURIComponent(city)}">🗺️ 地圖</button>
+            </div>
+          </div>
+          <ul class="list">${rows}</ul>
+        </article>
+      `;
+    }
+
+    btnWeather.addEventListener("click", async () => {
+      const cities = getCities();
+      if(!cities.length){
+        weatherCards.innerHTML = `<div class="hint">先加城市先啦～</div>`;
+        return;
+      }
+
+      wStatus.textContent = "⏳ 更新中…（第一次可能慢少少）";
+      weatherCards.innerHTML = "";
+
+      // sequential fetch to keep it simple (and avoid rate spikes)
+      for(const city of cities){
+        try{
+          let coord = cityDB[city];
+          if(!coord){
+            const geo = await geocodeCity(city);
+            if(!geo) throw new Error("no_geo");
+            coord = {lat: geo.lat, lon: geo.lon};
+            cityDB[city] = coord;
+          }
+          const data = await fetchForecast(coord.lat, coord.lon);
+          weatherCards.insertAdjacentHTML("beforeend", renderWeatherCard(city, data));
+        }catch(e){
+          weatherCards.insertAdjacentHTML("beforeend", `
+            <article class="card">
+              <div class="cardHead">
+                <div class="cardTitle">
+                  <h2>📍 ${city}</h2>
+                  <div class="meta"><span class="chip">⚠️ 取不到天氣</span></div>
+                </div>
+              </div>
+              <div class="hint">可能網絡問題/城市名未識別。你可以換個寫法（例：${city}市 / ${city}站）再試。</div>
+            </article>
+          `);
+        }
+      }
+
+      wStatus.textContent = `✅ 已更新（${new Date().toLocaleString("zh-Hant", {hour12:false})}）`;
+    });
+
+    // map from weather card
+    weatherCards.addEventListener("click", (e) => {
+      const map = e.target.closest("[data-map]");
+      if(map) openMapSearch(decodeURIComponent(map.dataset.map));
+    });
+
+    // -----------------------------
+    // init date range (from Excel)
+    // -----------------------------
+    $("#dateRange").textContent = "5/7 – 5/12";
+
+  </script>
 </body>
 </html>
