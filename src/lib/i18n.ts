@@ -31,6 +31,9 @@ export interface Translations {
   currencyConverter: string;
   quickConvert: string;
   highlights: string;
+  drivingHours: string;
+  drivingRest: string;
+  drivingRestMap: string;
   weather: {
     sunny: string;
     cloudy: string;
@@ -95,6 +98,9 @@ export const translations: Record<Language, Translations> = {
     currencyConverter: '匯率換算',
     quickConvert: '快速換算',
     highlights: '亮點：',
+    drivingHours: '小時車程',
+    drivingRest: '建議在高速公路休息站 (SA/PA) 停留休息',
+    drivingRestMap: '查看地圖',
     weather: {
       sunny: '晴天',
       cloudy: '陰天',
@@ -157,6 +163,9 @@ export const translations: Record<Language, Translations> = {
     currencyConverter: 'Currency Converter',
     quickConvert: 'Quick Convert',
     highlights: 'Highlights: ',
+    drivingHours: 'hr drive',
+    drivingRest: 'Recommend stopping at a highway rest area (SA/PA)',
+    drivingRestMap: 'View Map',
     weather: {
       sunny: 'Sunny',
       cloudy: 'Cloudy',
