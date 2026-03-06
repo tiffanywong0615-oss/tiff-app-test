@@ -74,7 +74,7 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" required />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">備注</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">備註</label>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" />
           </div>

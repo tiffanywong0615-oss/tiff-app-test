@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTripContext } from '@/context/TripContext';
 import { Check, Plus, Wrench, ArrowLeftRight, CheckSquare } from 'lucide-react';
 
-// Fixed demonstration rate (approx. rate as of 2025). Not a live rate.
+/** Demonstration exchange rate only — not a live rate. Always check current rates before travelling. */
 const JPY_TO_HKD = 0.055;
 
 export default function ToolboxPage() {

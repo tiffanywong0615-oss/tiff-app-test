@@ -85,11 +85,11 @@ export default function AddActivityModal({ onClose, onAdd }: AddActivityModalPro
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">備注</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">備註</label>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
-              placeholder="活動備注..."
+              placeholder="活動備註..."
               rows={2}
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6FAE] resize-none"
             />
