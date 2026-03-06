@@ -1,17 +1,20 @@
 'use client';
 
 import { TripProvider } from '@/context/TripContext';
-import Navigation from '@/components/Navigation';
+import { LanguageProvider } from '@/context/LanguageContext';
+import BottomNav from '@/components/BottomNav';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <TripProvider>
-      <div className="flex min-h-screen">
-        <Navigation />
-        <main className="flex-1 md:ml-64 min-h-screen bg-[#FFF8FB]">
-          {children}
-        </main>
-      </div>
-    </TripProvider>
+    <LanguageProvider>
+      <TripProvider>
+        <div className="min-h-screen bg-[#FFF8FB]">
+          <main className="min-h-screen bg-[#FFF8FB]">
+            {children}
+          </main>
+          <BottomNav />
+        </div>
+      </TripProvider>
+    </LanguageProvider>
   );
 }
