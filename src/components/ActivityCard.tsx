@@ -5,14 +5,16 @@ const ActivityCard = ({ activity }) => {
     const { type, location, mapQuery } = activity;
     const [photoUrl, setPhotoUrl] = React.useState('');
 
-    const fetchPhoto = async () => {
+    const fetchPhoto = React.useCallback(async () => {
+        let resolvedUrl = '';
+
         if (mapQuery) {
             const wikiSummaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(mapQuery)}`;
             const response = await fetch(wikiSummaryUrl);
             const data = await response.json();
 
             if (data.thumbnail) {
-                setPhotoUrl(data.thumbnail.source);
+                resolvedUrl = data.thumbnail.source;
             } else {
                 const wikiSearchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(mapQuery)}&origin=*`;
                 const searchResponse = await fetch(wikiSearchUrl);
@@ -23,20 +25,23 @@ const ActivityCard = ({ activity }) => {
                     const fallbackResponse = await fetch(fallbackUrl);
                     const fallbackData = await fallbackResponse.json();
                     if (fallbackData.items && fallbackData.items.length > 0) {
-                        setPhotoUrl(fallbackData.items[0].mediaUrl);
+                        resolvedUrl = fallbackData.items[0].mediaUrl;
                     }
                 }
             }
         }
+
         // Fallback to Unsplash if no photos found
-        if (!photoUrl) {
-            setPhotoUrl(`https://source.unsplash.com/featured/?${type},${location}`);
+        if (!resolvedUrl) {
+            resolvedUrl = `https://source.unsplash.com/featured/?${type},${location}`;
         }
-    };
+
+        setPhotoUrl(resolvedUrl);
+    }, [type, location, mapQuery]);
 
     React.useEffect(() => {
         fetchPhoto();
-    }, [mapQuery]);
+    }, [fetchPhoto]);
 
     return (
         <div className="activity-card">
