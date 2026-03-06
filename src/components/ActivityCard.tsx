@@ -6,34 +6,41 @@ const ActivityCard = ({ activity }) => {
     const [photoUrl, setPhotoUrl] = React.useState('');
 
     const fetchPhoto = React.useCallback(async () => {
+        const picsumUrl = `https://picsum.photos/seed/${encodeURIComponent(type + location)}/400/300`;
         let resolvedUrl = '';
 
-        if (mapQuery) {
-            const wikiSummaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(mapQuery)}`;
-            const response = await fetch(wikiSummaryUrl);
-            const data = await response.json();
+        try {
+            if (mapQuery) {
+                const wikiSummaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(mapQuery)}`;
+                const response = await fetch(wikiSummaryUrl);
+                const data = await response.json();
 
-            if (data.thumbnail) {
-                resolvedUrl = data.thumbnail.source;
-            } else {
-                const wikiSearchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(mapQuery)}&origin=*`;
-                const searchResponse = await fetch(wikiSearchUrl);
-                const searchData = await searchResponse.json();
-                if (searchData.query.search.length > 0) {
-                    const title = searchData.query.search[0].title;
-                    const fallbackUrl = `https://commons.wikimedia.org/w/api/rest_v1/feed/medium/image/${title}`;
-                    const fallbackResponse = await fetch(fallbackUrl);
-                    const fallbackData = await fallbackResponse.json();
-                    if (fallbackData.items && fallbackData.items.length > 0) {
-                        resolvedUrl = fallbackData.items[0].mediaUrl;
+                if (data.thumbnail) {
+                    resolvedUrl = data.thumbnail.source;
+                } else {
+                    const wikiSearchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(mapQuery)}&origin=*`;
+                    const searchResponse = await fetch(wikiSearchUrl);
+                    const searchData = await searchResponse.json();
+                    if (searchData.query?.search?.length > 0) {
+                        const title = searchData.query.search[0].title;
+                        const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&format=json&srsearch=${encodeURIComponent(title)}&origin=*`;
+                        const commonsResponse = await fetch(commonsUrl);
+                        const commonsData = await commonsResponse.json();
+                        if (commonsData.query?.search?.length > 0) {
+                            const fileTitle = commonsData.query.search[0].title;
+                            resolvedUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileTitle)}?width=400`;
+                        }
                     }
                 }
             }
+        } catch (error) {
+            console.error('Photo fetch failed:', error);
+            resolvedUrl = '';
         }
 
-        // Fallback to Unsplash if no photos found
+        // Fallback to picsum.photos if no photo was resolved
         if (!resolvedUrl) {
-            resolvedUrl = `https://source.unsplash.com/featured/?${type},${location}`;
+            resolvedUrl = picsumUrl;
         }
 
         setPhotoUrl(resolvedUrl);
