@@ -8,6 +8,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import DaySelector from '@/components/DaySelector';
 import ActivityCard from '@/components/ActivityCard';
 import TopHeader from '@/components/TopHeader';
+import { translateText } from '@/lib/translate';
 
 const weatherIcons = {
   'sunny': Sun,
@@ -41,7 +42,9 @@ export default function TripDetailPage() {
   const [selectedDay, setSelectedDay] = useState(1);
   const [countdown, setCountdown] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [translatedTitle, setTranslatedTitle] = useState('');
-  const titleTranslationCache = useRef<Record<string, string>>({});
+  const [translatedActivities, setTranslatedActivities] = useState<Array<{ location: string; notes: string }>>([]);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const translationCache = useRef<Record<string, string>>({});
 
   const trip = trips.find(tr => tr.id === params.id);
 
@@ -51,26 +54,53 @@ export default function TripDetailPage() {
       setTranslatedTitle(trip.title);
       return;
     }
-    const cacheKey = `${trip.id}_title_${language}`;
-    if (titleTranslationCache.current[cacheKey]) {
-      setTranslatedTitle(titleTranslationCache.current[cacheKey]);
+    const cacheKey = `title_${trip.id}`;
+    if (translationCache.current[cacheKey]) {
+      setTranslatedTitle(translationCache.current[cacheKey]);
       return;
     }
-    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(trip.title)}&langpair=zh|en`)
-      .then(res => {
-        if (!res.ok) throw new Error('Translation request failed');
-        return res.json();
-      })
-      .then((data: { responseData: { translatedText: string }; responseStatus: number }) => {
-        if (data.responseStatus === 200) {
-          titleTranslationCache.current[cacheKey] = data.responseData.translatedText;
-          setTranslatedTitle(data.responseData.translatedText);
-        } else {
-          setTranslatedTitle(trip.title);
-        }
-      })
-      .catch(() => setTranslatedTitle(trip.title));
+    translateText(trip.title).then(result => {
+      translationCache.current[cacheKey] = result;
+      setTranslatedTitle(result);
+    });
   }, [language, trip]);
+
+  useEffect(() => {
+    if (!trip) return;
+    const dayIndex = selectedDay - 1;
+    const currentDay = trip.dailyItinerary[dayIndex];
+    if (!currentDay) return;
+
+    if (language === 'zh') {
+      setTranslatedActivities([]);
+      return;
+    }
+
+    const activities = currentDay.activities;
+    setIsTranslating(true);
+
+    Promise.all(
+      activities.map(async (activity) => {
+        const locKey = `loc_${activity.id}`;
+        const notesKey = `notes_${activity.id}`;
+
+        const [loc, notes] = await Promise.all([
+          translationCache.current[locKey]
+            ? Promise.resolve(translationCache.current[locKey])
+            : translateText(activity.location).then(r => { translationCache.current[locKey] = r; return r; }),
+          translationCache.current[notesKey]
+            ? Promise.resolve(translationCache.current[notesKey])
+            : translateText(activity.notes).then(r => { translationCache.current[notesKey] = r; return r; }),
+        ]);
+        return { location: loc, notes };
+      })
+    ).then(results => {
+      setTranslatedActivities(results);
+      setIsTranslating(false);
+    }).catch(() => {
+      setIsTranslating(false);
+    });
+  }, [language, trip, selectedDay]);
 
   useEffect(() => {
     if (!trip) return;
@@ -195,13 +225,38 @@ export default function TripDetailPage() {
           </div>
         ) : (
           <div>
-            {currentDay.activities.map((activity) => (
-              <ActivityCard
-                key={activity.id}
-                activity={activity}
-                tripId={trip.id}
-                dayIndex={dayIndex}
-              />
+            {isTranslating && (
+              <p className="text-xs text-gray-400 text-center mb-3 animate-pulse">翻譯中... / Translating...</p>
+            )}
+            {currentDay.activities.map((activity, idx) => (
+              <div key={activity.id}>
+                <ActivityCard
+                  activity={activity}
+                  tripId={trip.id}
+                  dayIndex={dayIndex}
+                  translatedLocation={translatedActivities[idx]?.location}
+                  translatedNotes={translatedActivities[idx]?.notes}
+                />
+                {activity.drivingToNext !== undefined && (
+                  <div className="driving-segment">
+                    <div className="driving-segment-label">
+                      🚗 約 {activity.drivingToNext} 小時車程
+                    </div>
+                    {activity.drivingToNext > 1.5 && (
+                      <div className="driving-segment-rest">
+                        💡 建議在高速公路休息站 (SA/PA) 停留休息{' '}
+                        <a
+                          href="https://www.google.com/maps/search/?api=1&query=高速道路+サービスエリア+パーキングエリア"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          查看地圖
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         )}

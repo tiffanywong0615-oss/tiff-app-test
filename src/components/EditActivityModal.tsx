@@ -25,11 +25,14 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
   const [location, setLocation] = useState(activity.location);
   const [notes, setNotes] = useState(activity.notes);
   const [cost, setCost] = useState(String(activity.cost));
+  const [costCurrency, setCostCurrency] = useState<'JPY' | 'HKD'>(activity.costCurrency ?? 'JPY');
   const [mapQuery, setMapQuery] = useState(activity.mapQuery);
+  const [drivingToNext, setDrivingToNext] = useState(activity.drivingToNext !== undefined ? String(activity.drivingToNext) : '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ type: selectedType, time, location, notes, cost: Number(cost) || 0, mapQuery });
+    const drivingVal = drivingToNext !== '' ? Number(drivingToNext) : undefined;
+    onSave({ type: selectedType, time, location, notes, cost: Number(cost) || 0, costCurrency, mapQuery, drivingToNext: drivingVal });
     onClose();
   };
 
@@ -79,13 +82,32 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">費用 (¥)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">費用貨幣</label>
+            <div className="flex gap-3">
+              {(['JPY', 'HKD'] as const).map(c => (
+                <label key={c} className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="costCurrency" value={c} checked={costCurrency === c} onChange={() => setCostCurrency(c)} className="accent-blue-500" />
+                  <span className="text-sm">{c === 'JPY' ? '¥ JPY' : 'HK$ HKD'}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              費用 ({costCurrency === 'HKD' ? 'HK$' : '¥'})
+            </label>
             <input type="number" value={cost} onChange={e => setCost(e.target.value)} min="0"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">地圖搜尋關鍵字</label>
             <input type="text" value={mapQuery} onChange={e => setMapQuery(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">駕車至下一站 (小時)</label>
+            <input type="number" value={drivingToNext} onChange={e => setDrivingToNext(e.target.value)}
+              min="0" step="0.5" placeholder="e.g. 1.5"
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <div className="flex gap-3 pt-2">
@@ -102,3 +124,4 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
     </div>
   );
 }
+

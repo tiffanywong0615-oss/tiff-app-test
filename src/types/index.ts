@@ -11,7 +11,9 @@ export interface Activity {
   location: string;
   notes: string;
   cost: number;
+  costCurrency?: 'JPY' | 'HKD';
   mapQuery: string;
+  drivingToNext?: number;
 }
 
 export interface DayItinerary {

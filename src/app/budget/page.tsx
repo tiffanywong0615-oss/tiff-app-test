@@ -6,6 +6,8 @@ import BudgetChart from '@/components/BudgetChart';
 import TopHeader from '@/components/TopHeader';
 import { PieChart as PieChartIcon, TrendingUp, AlertTriangle } from 'lucide-react';
 
+import { JPY_TO_HKD } from '@/lib/currency';
+
 export default function BudgetPage() {
   const { trips } = useTripContext();
   const { t } = useLanguage();
@@ -33,7 +35,8 @@ export default function BudgetPage() {
   const spending: Record<string, number> = { Food: 0, Transport: 0, Hotel: 0, Sightseeing: 0, Shopping: 0, Other: 0 };
   trip.dailyItinerary.forEach(day => {
     day.activities.forEach(act => {
-      spending[act.type] = (spending[act.type] || 0) + act.cost;
+      const costInJpy = act.costCurrency === 'HKD' ? Math.round(act.cost / JPY_TO_HKD) : act.cost;
+      spending[act.type] = (spending[act.type] || 0) + costInJpy;
     });
   });
 

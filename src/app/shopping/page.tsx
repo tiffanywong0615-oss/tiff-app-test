@@ -130,6 +130,16 @@ export default function ShoppingPage() {
         )}
       </div>
 
+      {/* FAB */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="fixed bottom-24 right-4 z-40 flex items-center gap-1 bg-[#FF6FAE] text-white text-sm font-semibold px-4 py-3 rounded-full shadow-lg hover:bg-pink-500 transition-colors"
+        aria-label={t.addShoppingItem}
+      >
+        <Plus size={16} />
+        {t.addShoppingItem}
+      </button>
+
       {/* Add Item Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end justify-center z-50 p-4">
