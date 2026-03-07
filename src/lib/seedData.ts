@@ -22,7 +22,7 @@ export function getSeedData(): Trip[] {
         },
       },
       checklist: [
-        { id: uuidv4(), item: '護照、簽證', completed: false },
+        { id: uuidv4(), item: '護照、Visit Japan', completed: false },
         { id: uuidv4(), item: '信用卡、現金', completed: false },
         { id: uuidv4(), item: '手機/充電器', completed: false },
         { id: uuidv4(), item: '行李打包', completed: false },
@@ -40,10 +40,10 @@ export function getSeedData(): Trip[] {
           date: '2026-05-07',
           weather: { condition: 'sunny', high: 26, low: 18 },
           activities: [
-            { id: uuidv4(), time: '08:15', type: 'Plane', location: 'CX512 HKG→FUK 航班', notes: '由香港出發飛福岡', cost: 0, mapQuery: 'Fukuoka Airport' },
-            { id: uuidv4(), time: '14:00', type: 'Transport', location: '租車公司取車（大7人車）', notes: '福岡機場租車', cost: 18000, mapQuery: 'Fukuoka Airport Car Rental', drivingToNext: 0.5 },
-            { id: uuidv4(), time: '15:00', type: 'Food', location: '和牛明太神樂（和牛明太子蓋飯）', notes: '太宰府必吃和牛明太子蓋飯', cost: 2500, mapQuery: '和牛明太神樂 太宰府' },
-            { id: uuidv4(), time: '16:30', type: 'Sightseeing', location: '太宰府天滿宮參拜、星巴克咖啡', notes: '日本最著名的學問之神神社', cost: 0, mapQuery: '太宰府天滿宮', drivingToNext: 1.5 },
+            { id: uuidv4(), time: '08:15', type: 'Plane', location: '航班 CX512 HKG→FUK', notes: '由香港出發飛福岡', cost: 0, mapQuery: 'Fukuoka Airport' },
+            { id: uuidv4(), time: '14:00', type: 'Transport', location: '租車公司取車（Honda Freed）', notes: '福岡機場租車', cost: 18000, mapQuery: 'Fukuoka Airport Car Rental', drivingToNext: 0.5 },
+            { id: uuidv4(), time: '15:00', type: 'Food', location: '和牛明太神樂（和牛明太子蓋飯）', notes: '這是一間融合傳統與現代的餐廳，主推福岡當地特產的九州黑毛和牛、老店「福屋」的精製明太子，以及在地土產蔬果天婦羅，通通裝在有如寶箱的「大川組子」工藝木盒內，不僅囊括在地食材珍饌，滿滿儀式感更是令人興奮！', cost: 2500, mapQuery: '和牛明太神樂 太宰府' },
+            { id: uuidv4(), time: '16:30', type: 'Sightseeing', location: '天滿宮參拜、星巴克咖啡', notes: '日本最著名的學問之神神社', cost: 0, mapQuery: '太宰府天滿宮', drivingToNext: 1.5 },
             { id: uuidv4(), time: '19:30', type: 'Food', location: '馬櫻 馬肉料理（馬肉刺身/燒肉）', notes: '熊本名物馬肉料理', cost: 5000, mapQuery: '馬櫻 熊本' },
             { id: uuidv4(), time: '21:00', type: 'Shopping', location: '下通購物街', notes: '熊本市中心購物商圈', cost: 0, mapQuery: '下通 熊本' },
             { id: uuidv4(), time: '22:30', type: 'Hotel', location: '熊本花開酒店', notes: '熊本市中心住宿', cost: 13200, mapQuery: '熊本花開酒店' },
@@ -107,7 +107,7 @@ export function getSeedData(): Trip[] {
           activities: [
             { id: uuidv4(), time: '09:00', type: 'Food', location: '柳橋連合市場 - 海鮮丼 / 明太子飯糰', notes: '博多廚房海鮮早餐', cost: 2000, mapQuery: '柳橋連合市場 福岡' },
             { id: uuidv4(), time: '11:30', type: 'Food', location: '珈琲美美（大濠公園旁）', notes: '大濠公園旁特色咖啡', cost: 800, mapQuery: '珈琲美美 福岡' },
-            { id: uuidv4(), time: '16:15', type: 'Transport', location: 'CX529 FUK→HKG 航班', notes: '由福岡飛返香港', cost: 0, mapQuery: 'Fukuoka Airport' },
+            { id: uuidv4(), time: '16:15', type: 'Plane', location: '航班 CX529 FUK→HKG', notes: '由福岡飛返香港', cost: 0, mapQuery: 'Fukuoka Airport' },
           ],
         },
       ],
