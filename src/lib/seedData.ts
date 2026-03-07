@@ -40,7 +40,7 @@ export function getSeedData(): Trip[] {
           date: '2026-05-07',
           weather: { condition: 'sunny', high: 26, low: 18 },
           activities: [
-            { id: uuidv4(), time: '08:15', type: 'Transport', location: 'CX512 HKG→FUK 航班', notes: '由香港出發飛福岡', cost: 0, mapQuery: 'Fukuoka Airport' },
+            { id: uuidv4(), time: '08:15', type: 'Plane', location: 'CX512 HKG→FUK 航班', notes: '由香港出發飛福岡', cost: 0, mapQuery: 'Fukuoka Airport' },
             { id: uuidv4(), time: '14:00', type: 'Transport', location: '租車公司取車（大7人車）', notes: '福岡機場租車', cost: 18000, mapQuery: 'Fukuoka Airport Car Rental', drivingToNext: 0.5 },
             { id: uuidv4(), time: '15:00', type: 'Food', location: '和牛明太神樂（和牛明太子蓋飯）', notes: '太宰府必吃和牛明太子蓋飯', cost: 2500, mapQuery: '和牛明太神樂 太宰府' },
             { id: uuidv4(), time: '16:30', type: 'Sightseeing', location: '太宰府天滿宮參拜、星巴克咖啡', notes: '日本最著名的學問之神神社', cost: 0, mapQuery: '太宰府天滿宮', drivingToNext: 1.5 },
