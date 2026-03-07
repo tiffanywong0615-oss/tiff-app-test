@@ -44,7 +44,7 @@ export function getSeedData(): Trip[] {
             { id: uuidv4(), time: '14:00', type: 'Transport', location: '租車公司取車（Honda Freed）', notes: '福岡機場租車', cost: 18000, mapQuery: 'Fukuoka Airport Car Rental', drivingToNext: 0.5 },
             { id: uuidv4(), time: '15:00', type: 'Food', location: '和牛明太神樂（和牛明太子蓋飯）', notes: '這是一間融合傳統與現代的餐廳，主推福岡當地特產的九州黑毛和牛、老店「福屋」的精製明太子，以及在地土產蔬果天婦羅，通通裝在有如寶箱的「大川組子」工藝木盒內，不僅囊括在地食材珍饌，滿滿儀式感更是令人興奮！', cost: 2500, mapQuery: '和牛明太神樂 太宰府' },
             { id: uuidv4(), time: '16:30', type: 'Sightseeing', location: '天滿宮參拜、星巴克咖啡', notes: '日本最著名的學問之神神社', cost: 0, mapQuery: '太宰府天滿宮', drivingToNext: 1.5 },
-            { id: uuidv4(), time: '19:30', type: 'Food', location: '馬櫻 馬肉料理（馬肉刺身/燒肉）', notes: '熊本名物馬肉料理', cost: 5000, mapQuery: '馬櫻 熊本' },
+            { id: uuidv4(), time: '19:30', type: 'Food', location: '馬櫻 馬肉料理（熊本名物）', notes: '馬櫻（Umazakura）是熊本著名的馬肉料理專門店，以精選的國產馬肉聞名，提供多樣化的烹飪方式，包含高品質的馬肉刺身、燒肉、火鍋及創作料理', cost: 5000, mapQuery: '馬櫻 熊本' },
             { id: uuidv4(), time: '21:00', type: 'Shopping', location: '下通購物街', notes: '熊本市中心購物商圈', cost: 0, mapQuery: '下通 熊本' },
             { id: uuidv4(), time: '22:30', type: 'Hotel', location: '熊本花開酒店', notes: '熊本市中心住宿', cost: 13200, mapQuery: '熊本花開酒店' },
           ],
