@@ -6,7 +6,7 @@ import { Activity } from '@/types';
 import { useTripContext } from '@/context/TripContext';
 import { useLanguage } from '@/context/LanguageContext';
 import EditActivityModal from './EditActivityModal';
-import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil, Clock, MapPin, ParkingCircle } from 'lucide-react';
+import { UtensilsCrossed, Camera, Train, Building, ShoppingBag, MoreHorizontal, Pencil, Clock, MapPin, ParkingCircle, Plane } from 'lucide-react'; // <-- Plane added
 import { JPY_TO_HKD } from '@/lib/currency';
 
 interface ActivityCardProps {
@@ -17,10 +17,12 @@ interface ActivityCardProps {
     translatedNotes?: string;
 }
 
+// --- UPDATED: Added 'Plane' type config and emoji ---
 const typeConfig: Record<Activity['type'], { color: string; Icon: React.ElementType }> = {
     Food:        { color: '#F97316', Icon: UtensilsCrossed },
     Sightseeing: { color: '#3B82F6', Icon: Camera },
     Transport:   { color: '#22C55E', Icon: Train },
+    Plane:       { color: '#6366F1', Icon: Plane },           // <-- Added line
     Hotel:       { color: '#A855F7', Icon: Building },
     Shopping:    { color: '#EC4899', Icon: ShoppingBag },
     Other:       { color: '#94A3B8', Icon: MoreHorizontal },
@@ -29,11 +31,13 @@ const typeConfig: Record<Activity['type'], { color: string; Icon: React.ElementT
 const typeEmoji: Record<Activity['type'], string> = {
     Food:        '🍽️',
     Sightseeing: '📸',
-    Transport:   '✈️',
+    Transport:   '🚗',              // <-- Changed car emoji
+    Plane:       '✈️',              // <-- Added line
     Hotel:       '🏨',
     Shopping:    '🛍️',
     Other:       '✨',
 };
+// --- END UPDATE ---
 
 function formatCost(cost: number, costCurrency?: 'JPY' | 'HKD'): string {
     if (costCurrency === 'HKD') {
@@ -108,6 +112,27 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                                     </a>
                                 </div>
                             )}
+
+                            {/* ---- Driving Time Segment Added Below ---- */}
+                            {activity.drivingToNext !== undefined && activity.drivingToNext > 0 && (
+                                <div className="driving-segment" style={{ marginTop: '8px', padding: '8px', border: '1px solid #eee', borderRadius: '6px' }}>
+                                    <div className="driving-segment-label">
+                                        🚗 {activity.drivingToNext} {t.drivingHours}
+                                    </div>
+                                    <div className="driving-segment-rest">
+                                        {t.drivingRest}{' '}
+                                        <a
+                                            href={`https://www.google.com/maps/search/?api=1&query=休息站+near+${encodeURIComponent(activity.location)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ color: '#0070f3', textDecoration: 'underline' }}
+                                        >
+                                            {t.drivingRestMap}
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+                            {/* ---- End Driving Time Segment ---- */}
 
                             <div className="activity-footer">
                                 <div>
