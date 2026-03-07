@@ -79,9 +79,7 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                             </div>
 
                             <p className="activity-location">
-                                {activity.title && (
-                                    <span className="activity-title-prefix">{activity.title}：</span>
-                                )}
+                                <span className="activity-title-prefix">{label}：</span>
                                 {displayLocation}
                             </p>
 
