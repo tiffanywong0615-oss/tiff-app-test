@@ -184,6 +184,7 @@ export const translations: Record<Language, Translations> = {
       Food: 'Food',
       Sightseeing: 'Sightseeing',
       Transport: 'Transport',
+      Plane: "Plane",
       Hotel: 'Hotel',
       Shopping: 'Shopping',
       Other: 'Other',
