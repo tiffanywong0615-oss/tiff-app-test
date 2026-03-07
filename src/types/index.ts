@@ -7,7 +7,7 @@ export interface WeatherInfo {
 export interface Activity {
   id: string;
   time: string;
-  type: 'Food' | 'Sightseeing' | 'Transport' | 'Hotel' | 'Shopping' | 'Other';
+  type: 'Food' | 'Sightseeing' | 'Transport' | 'Plane' | 'Hotel' | 'Shopping' | 'Other';
   location: string;
   notes: string;
   cost: number;
