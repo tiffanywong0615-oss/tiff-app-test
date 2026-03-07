@@ -47,6 +47,7 @@ export interface Translations {
     Food: string;
     Sightseeing: string;
     Transport: string;
+    Plane: string;
     Hotel: string;
     Shopping: string;
     Other: string;
