@@ -54,13 +54,13 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                 <div className="activity-accent-bar" style={{ backgroundColor: color }} />
                 <div className="activity-body">
                     <div className="activity-type-row">
-                        <span className="activity-type-badge">
-                            <Icon size={12} />
-                            {label}
-                        </span>
                         <span className="activity-time">
                             <Clock size={13} />
                             {activity.time}
+                        </span>
+                        <span className="activity-type-badge">
+                            <Icon size={12} />
+                            {label}
                         </span>
                     </div>
 

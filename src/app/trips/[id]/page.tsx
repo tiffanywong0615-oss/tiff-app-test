@@ -197,6 +197,18 @@ export default function TripDetailPage() {
 
       {/* Activity list */}
       <div className="px-4 pt-4">
+        {/* Day Title with Location */}
+        {currentDay && currentDay.mainLocation && (
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-base font-bold text-[#2B2A33]">
+              {t.day}{currentDay.day}{t.daySuffix}
+            </span>
+            <span className="text-gray-300">｜</span>
+            <span className="text-sm font-medium text-[#FF6FAE]">
+              {currentDay.mainLocation}
+            </span>
+          </div>
+        )}
         {/* Weather Banner */}
         {currentDay && (
           <div className={`flex items-center gap-3 p-3 rounded-xl mb-4 ${weatherBg}`}> 
