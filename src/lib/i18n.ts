@@ -34,6 +34,8 @@ export interface Translations {
   drivingHours: string;
   drivingRest: string;
   drivingRestMap: string;
+  timeLabel: string;
+  locationLabel: string;
   weather: {
     sunny: string;
     cloudy: string;
@@ -101,6 +103,8 @@ export const translations: Record<Language, Translations> = {
     drivingHours: '小時車程',
     drivingRest: '建議在高速公路休息站 (SA/PA) 停留休息',
     drivingRestMap: '查看地圖',
+    timeLabel: '時間',
+    locationLabel: '地點',
     weather: {
       sunny: '晴天',
       cloudy: '陰天',
@@ -166,6 +170,8 @@ export const translations: Record<Language, Translations> = {
     drivingHours: 'hr drive',
     drivingRest: 'Recommend stopping at a highway rest area (SA/PA)',
     drivingRestMap: 'View Map',
+    timeLabel: 'Time',
+    locationLabel: 'Location',
     weather: {
       sunny: 'Sunny',
       cloudy: 'Cloudy',
