@@ -199,7 +199,7 @@ export default function TripDetailPage() {
       <div className="px-4 pt-4">
         {/* Weather Banner */}
         {currentDay && (
-          <div className={`flex items-center gap-3 p-3 rounded-xl mb-4 ${weatherBg}`}>
+          <div className={`flex items-center gap-3 p-3 rounded-xl mb-4 ${weatherBg}`}> 
             <WeatherIcon className={`w-6 h-6 flex-shrink-0 ${weatherText}`} />
             <div className="flex-1">
               <span className={`text-sm font-semibold ${weatherText}`}>{weatherLabel}</span>
@@ -226,7 +226,7 @@ export default function TripDetailPage() {
         ) : (
           <div>
             {isTranslating && (
-              <p className="text-xs text-gray-400 text-center mb-3 animate-pulse">翻譯中... / Translating...</p>
+              <p className="text-xs text-gray-400 text-center mb-3 animate-pulse">{t.translating}</p>
             )}
             {currentDay.activities.map((activity, idx) => (
               <div key={activity.id}>
@@ -240,17 +240,17 @@ export default function TripDetailPage() {
                 {activity.drivingToNext !== undefined && (
                   <div className="driving-segment">
                     <div className="driving-segment-label">
-                      🚗 約 {activity.drivingToNext} 小時車程
+                      🚗 {language === 'zh' ? `約 ${activity.drivingToNext} ` : `~${activity.drivingToNext} `}{t.drivingHours}
                     </div>
                     {activity.drivingToNext > 1.5 && (
                       <div className="driving-segment-rest">
-                        💡 建議在高速公路休息站 (SA/PA) 停留休息{' '}
+                        💡 {t.drivingRest}{' '}
                         <a
                           href="https://www.google.com/maps/search/?api=1&query=高速道路+サービスエリア+パーキングエリア"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          查看地圖
+                          {t.drivingRestMap}
                         </a>
                       </div>
                     )}
