@@ -21,6 +21,7 @@ const types: { type: Activity['type']; label: string; icon: React.ElementType; c
 
 export default function EditActivityModal({ activity, onClose, onSave }: EditActivityModalProps) {
   const [selectedType, setSelectedType] = useState<Activity['type']>(activity.type);
+  const [title, setTitle] = useState(activity.title ?? '');
   const [time, setTime] = useState(activity.time);
   const [location, setLocation] = useState(activity.location);
   const [notes, setNotes] = useState(activity.notes);
@@ -32,7 +33,7 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const drivingVal = drivingToNext !== '' ? Number(drivingToNext) : undefined;
-    onSave({ type: selectedType, time, location, notes, cost: Number(cost) || 0, costCurrency, mapQuery, drivingToNext: drivingVal });
+    onSave({ type: selectedType, time, title, location, notes, cost: Number(cost) || 0, costCurrency, mapQuery, drivingToNext: drivingVal });
     onClose();
   };
 
@@ -65,6 +66,16 @@ export default function EditActivityModal({ activity, onClose, onSave }: EditAct
                 </button>
               ))}
             </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">標題 (選填)</label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="例：早餐、午餐、觀光"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">時間 *</label>

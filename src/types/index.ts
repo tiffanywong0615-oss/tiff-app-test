@@ -9,6 +9,7 @@ export interface Activity {
   time: string;
   type: 'Food' | 'Sightseeing' | 'Transport' | 'Hotel' | 'Shopping' | 'Other';
   location: string;
+  title?: string;
   notes: string;
   cost: number;
   costCurrency?: 'JPY' | 'HKD';

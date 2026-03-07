@@ -26,6 +26,15 @@ const typeConfig: Record<Activity['type'], { color: string; Icon: React.ElementT
     Other:       { color: '#94A3B8', Icon: MoreHorizontal },
 };
 
+const typeEmoji: Record<Activity['type'], string> = {
+    Food:        '🍽️',
+    Sightseeing: '📸',
+    Transport:   '🚗',
+    Hotel:       '🏨',
+    Shopping:    '🛍️',
+    Other:       '✨',
+};
+
 function formatCost(cost: number, costCurrency?: 'JPY' | 'HKD'): string {
     if (costCurrency === 'HKD') {
         const hkd = cost;
@@ -53,56 +62,68 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
             <div className="activity-card">
                 <div className="activity-accent-bar" style={{ backgroundColor: color }} />
                 <div className="activity-body">
-                    <div className="activity-type-row">
-                        <span className="activity-time">
-                            <Clock size={13} />
-                            {activity.time}
-                        </span>
-                        <span className="activity-type-badge">
-                            <Icon size={12} />
-                            {label}
-                        </span>
-                    </div>
-
-                    <p className="activity-location">{displayLocation}</p>
-
-                    {displayNotes && (
-                        <p className="activity-highlights">✨ {t.highlights}{displayNotes}</p>
-                    )}
-                    {activity.mapQuery && (
-                        <div className="activity-map-buttons">
-                            <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.mapQuery)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="activity-map-btn"
-                            >
-                                <MapPin size={13} />
-                                {t.viewMap}
-                            </a>
-                            <a
-                                href={`https://www.google.com/maps/search/?api=1&query=parking+near+${encodeURIComponent(activity.mapQuery)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="activity-map-btn activity-map-btn--parking"
-                            >
-                                <ParkingCircle size={13} />
-                                {t.nearestParking}
-                            </a>
+                    <div className="activity-main-row">
+                        <div className="activity-emoji-icon" style={{ backgroundColor: color + '20' }}>
+                            <span>{typeEmoji[activity.type]}</span>
                         </div>
-                    )}
+                        <div className="activity-content">
+                            <div className="activity-type-row">
+                                <span className="activity-time">
+                                    <Clock size={13} />
+                                    {activity.time}
+                                </span>
+                                <span className="activity-type-badge">
+                                    <Icon size={12} />
+                                    {label}
+                                </span>
+                            </div>
 
-                    <div className="activity-footer">
-                        <div>
-                            <span className="activity-cost">💴 {formatCost(activity.cost, activity.costCurrency)}</span>
+                            <p className="activity-location">
+                                {activity.title && (
+                                    <span className="activity-title-prefix">{activity.title}：</span>
+                                )}
+                                {displayLocation}
+                            </p>
+
+                            {displayNotes && (
+                                <p className="activity-highlights">✨ {t.highlights}{displayNotes}</p>
+                            )}
+                            {activity.mapQuery && (
+                                <div className="activity-map-buttons">
+                                    <a
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.mapQuery)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="activity-map-btn"
+                                    >
+                                        <MapPin size={13} />
+                                        {t.viewMap}
+                                    </a>
+                                    <a
+                                        href={`https://www.google.com/maps/search/?api=1&query=parking+near+${encodeURIComponent(activity.mapQuery)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="activity-map-btn activity-map-btn--parking"
+                                    >
+                                        <ParkingCircle size={13} />
+                                        {t.nearestParking}
+                                    </a>
+                                </div>
+                            )}
+
+                            <div className="activity-footer">
+                                <div>
+                                    <span className="activity-cost">💴 {formatCost(activity.cost, activity.costCurrency)}</span>
+                                </div>
+                                <button
+                                    className="activity-edit-btn"
+                                    onClick={() => setIsEditing(true)}
+                                    aria-label={t.editCost}
+                                >
+                                    <Pencil size={15} />
+                                </button>
+                            </div>
                         </div>
-                        <button
-                            className="activity-edit-btn"
-                            onClick={() => setIsEditing(true)}
-                            aria-label={t.editCost}
-                        >
-                            <Pencil size={15} />
-                        </button>
                     </div>
                 </div>
             </div>

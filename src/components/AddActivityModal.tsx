@@ -20,6 +20,7 @@ const types: { type: Activity['type']; label: string; icon: React.ElementType; c
 
 export default function AddActivityModal({ onClose, onAdd }: AddActivityModalProps) {
   const [selectedType, setSelectedType] = useState<Activity['type']>('Food');
+  const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [notes, setNotes] = useState('');
@@ -32,7 +33,7 @@ export default function AddActivityModal({ onClose, onAdd }: AddActivityModalPro
     e.preventDefault();
     if (!time || !location) return;
     const drivingVal = drivingToNext !== '' ? Number(drivingToNext) : undefined;
-    onAdd({ time, type: selectedType, location, notes, cost: Number(cost) || 0, costCurrency, mapQuery, drivingToNext: drivingVal });
+    onAdd({ time, type: selectedType, title, location, notes, cost: Number(cost) || 0, costCurrency, mapQuery, drivingToNext: drivingVal });
     onClose();
   };
 
@@ -65,6 +66,16 @@ export default function AddActivityModal({ onClose, onAdd }: AddActivityModalPro
                 </button>
               ))}
             </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">標題 (選填)</label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="例：早餐、午餐、觀光"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6FAE]"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">時間 *</label>
