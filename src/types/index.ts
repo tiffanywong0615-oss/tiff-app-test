@@ -21,6 +21,7 @@ export interface DayItinerary {
   date: string;
   weather: WeatherInfo;
   activities: Activity[];
+  mainLocation?: string;
 }
 
 export interface Budget {
