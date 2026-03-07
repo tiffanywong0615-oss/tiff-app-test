@@ -99,7 +99,7 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                         <button
                             className="activity-edit-btn"
                             onClick={() => setIsEditing(true)}
-                            aria-label="編輯活動"
+                            aria-label={t.editCost}
                         >
                             <Pencil size={15} />
                         </button>
