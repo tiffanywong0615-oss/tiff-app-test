@@ -29,7 +29,7 @@ const typeConfig: Record<Activity['type'], { color: string; Icon: React.ElementT
 const typeEmoji: Record<Activity['type'], string> = {
     Food:        '🍽️',
     Sightseeing: '📸',
-    Transport:   '🚗',
+    Transport:   '✈️',
     Hotel:       '🏨',
     Shopping:    '🛍️',
     Other:       '✨',
