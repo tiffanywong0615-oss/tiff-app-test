@@ -116,6 +116,7 @@ export const translations: Record<Language, Translations> = {
       Food: '餐飲',
       Sightseeing: '觀光',
       Transport: '交通',
+      Plane: '飛機',
       Hotel: '住宿',
       Shopping: '購物',
       Other: '其他',
