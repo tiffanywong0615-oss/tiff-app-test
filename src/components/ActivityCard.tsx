@@ -113,27 +113,6 @@ const ActivityCard = ({ activity, tripId, dayIndex, translatedLocation, translat
                                 </div>
                             )}
 
-                            {/* ---- Driving Time Segment Added Below ---- */}
-                            {activity.drivingToNext !== undefined && activity.drivingToNext > 0 && (
-                                <div className="driving-segment" style={{ marginTop: '8px', padding: '8px', border: '1px solid #eee', borderRadius: '6px' }}>
-                                    <div className="driving-segment-label">
-                                        🚗 {activity.drivingToNext} {t.drivingHours}
-                                    </div>
-                                    <div className="driving-segment-rest">
-                                        {t.drivingRest}{' '}
-                                        <a
-                                            href={`https://www.google.com/maps/search/?api=1&query=休息站+near+${encodeURIComponent(activity.location)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={{ color: '#0070f3', textDecoration: 'underline' }}
-                                        >
-                                            {t.drivingRestMap}
-                                        </a>
-                                    </div>
-                                </div>
-                            )}
-                            {/* ---- End Driving Time Segment ---- */}
-
                             <div className="activity-footer">
                                 <div>
                                     <span className="activity-cost">💴 {formatCost(activity.cost, activity.costCurrency)}</span>
