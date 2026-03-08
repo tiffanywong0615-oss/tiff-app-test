@@ -250,23 +250,21 @@ export default function TripDetailPage() {
                   translatedNotes={translatedActivities[idx]?.notes}
                 />
                 {activity.drivingToNext !== undefined && activity.drivingToNext > 0 && (
-  <div className="driving-segment" style={{marginTop:"8px", padding:"8px", border:"1px solid #eee", borderRadius:"6px"}}>
-    <div className="driving-segment-label">
-      🚗 約 {activity.drivingToNext} 小時車程
-    </div>
-    <div className="driving-segment-rest">
-      建議在高速公路休息站 (SA/PA) 停留休息
-      <a
-        href="https://www.google.com/maps/search/?api=1&query=高速道路+サービスエリア+パーキングエリア"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{color:'#0070f3', textDecoration:'underline', marginLeft:'6px'}}
-      >
-        查看地圖
-      </a>
-    </div>
-  </div>
-)}
+                  <div className="driving-segment" style={{marginTop:"8px", padding:"8px", border:"1px solid #eee", borderRadius:"6px"}}>
+                    <div className="driving-segment-label">
+                      🚗 約 {activity.drivingToNext} 小時車程
+                    </div>
+                    <div className="driving-segment-rest">
+                      建議在高速公路休息站 (SA/PA) 停留休息
+                      <a
+                        href="https://www.google.com/maps/search/?api=1&query=高速道路+サービスエリア+パーキングエリア"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{color:'#0070f3', textDecoration:'underline', marginLeft:'6px'}}
+                      >
+                        查看地圖
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
