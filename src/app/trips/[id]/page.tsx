@@ -1,6 +1,5 @@
-export const revalidate = 0;
-
 'use client';
+export const revalidate = 0;
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
